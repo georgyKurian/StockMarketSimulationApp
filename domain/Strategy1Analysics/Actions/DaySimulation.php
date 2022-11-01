@@ -8,12 +8,12 @@ class DaySimulation
 {
     private static int $timeIndexForAnalysis = 1000;
     private static int $exitTime = 1545;
-    
+
     private ?float $longEnterAtPrice;
     private ?float $longExitAtPrice;
     private ?float $longProfit;
     private int $longPositionStage;
-    
+
 
     private ?float $shortEnterAtPrice;
     private ?float $shortExitAtPrice;
@@ -43,7 +43,7 @@ class DaySimulation
 
         $this->shortEnterAtPrice = null;
         $this->shortExitAtPrice = null;
-        
+
         $this->longPositionStage = 1;
         $this->shortPositionStage = 1;
 
@@ -53,25 +53,25 @@ class DaySimulation
     private function computeEntryAndExitCriteria(float $bufferSize)
     {
         $intradayForAnalyzing = $this->intradayCollection->findCandleStickByTime(self::$timeIndexForAnalysis);
-        
-        if(!$intradayForAnalyzing){
+
+        if (!$intradayForAnalyzing) {
             return null;
         }
 
         $this->longEnterAtPrice = $intradayForAnalyzing->high + $bufferSize;
         $this->shortEnterAtPrice = $intradayForAnalyzing->low - $bufferSize;
-        
+
         return $this;
     }
 
-    private function simulateRestOfTheDay():self
+    private function simulateRestOfTheDay(): self
     {
         $restOfTheDaysCandlesticks = $this
             ->intradayCollection
             ->filterCandleSticksBetweenTime(self::$timeIndexForAnalysis, self::$exitTime)
             ->orderByTime();
 
-        foreach($this->intradayCollection as $candleStick) {
+        foreach ($this->intradayCollection as $candleStick) {
             if ($this->longPositionStage === 1 && $candleStick->high >= $this->longEnterAtPrice) {
                 // buy
                 $this->longPositionStage = 2;
@@ -79,7 +79,7 @@ class DaySimulation
                 $this->longPositionStage = 3;
                 $this->longExitAtPrice = $this->shortEnterAtPrice;
             }
-            
+
             if ($this->shortPositionStage === 1 && $candleStick->low <= $this->shortEnterAtPrice) {
                 $this->shortPositionStage = 2;
             } elseif ($this->shortPositionStage === 2 && $candleStick->high >= $this->longEnterAtPrice) {
@@ -92,13 +92,13 @@ class DaySimulation
             ->intradayCollection
             ->findCandleStickByTime(self::$exitTime);
 
-        if($exitCandle){
-            if ($this->longPositionStage === 2){
+        if ($exitCandle) {
+            if ($this->longPositionStage === 2) {
                 $this->longPositionStage = 3;
                 $this->longExitAtPrice = $exitCandle->vw_avg_price;
             }
 
-            if ($this->shortPositionStage === 2){
+            if ($this->shortPositionStage === 2) {
                 $this->shortPositionStage = 3;
                 $this->shortExitAtPrice = $exitCandle->vw_avg_price;
             }
@@ -109,13 +109,13 @@ class DaySimulation
 
     public function calculateProfitOrLoss()
     {
-        if($this->longExitAtPrice && $this->longEnterAtPrice) {
+        if ($this->longExitAtPrice && $this->longEnterAtPrice) {
             $this->longProfit = $this->longExitAtPrice - $this->longEnterAtPrice;
         } else {
             $this->longProfit = 0.0;
         }
 
-        if($this->shortExitAtPrice && $this->shortEnterAtPrice) {
+        if ($this->shortExitAtPrice && $this->shortEnterAtPrice) {
             $this->shortProfit = $this->shortEnterAtPrice - $this->shortExitAtPrice;
         } else {
             $this->shortProfit = 0.0;
@@ -141,5 +141,4 @@ class DaySimulation
             'Total Profit' => $this->totalProfit,
         ]);
     }
-
 }

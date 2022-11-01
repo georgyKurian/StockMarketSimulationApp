@@ -40,7 +40,7 @@ class InvestmentProjection extends Command
                     ->where('time', '>=', 1000)
                     ->oldest('recorded_at')
                     ->get();
-                    
+
                 (new DaySimulation($intradayIndex->day_index, $intradayPoints))->execute($riskFactor);
             });
 
