@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Intraday;
+use App\Models\CandleStick;
 use App\Services\PolygonClient;
 use Domain\Strategy1Analysics\Actions\DaySimulation;
 use Illuminate\Console\Command;
@@ -28,15 +28,16 @@ class InvestmentProjection extends Command
      *
      * @return int
      */
-    public function handle(PolygonClient $polygonClient)
+    public function handle()
     {
         $riskFactor = $this->argument('percentage');
 
-        Intraday::query()
+        CandleStick::query()
             ->distinct()
+            ->orderBy('day_index')
             ->get(['day_index'])
-            ->each(function (Intraday $intradayIndex) use ($riskFactor) {
-                $intradayPoints = Intraday::where('day_index', $intradayIndex->day_index)
+            ->each(function (CandleStick $intradayIndex) use ($riskFactor) {
+                $intradayPoints = CandleStick::where('day_index', $intradayIndex->day_index)
                     ->where('time', '>=', 1000)
                     ->oldest('recorded_at')
                     ->get();

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Intraday;
+use App\Models\CandleStick;
 use App\Services\PolygonClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -38,7 +38,7 @@ class ImportDataFromPolygon extends Command
                 $recordedAt = new Carbon($dataBlock['t']/1000);
 
                 if ($this->isDuringTradeHours($recordedAt)) {
-                    Intraday::create([
+                    CandleStick::create([
                         'day_index' => $recordedAt->isoFormat('YMMDD'),
                         'time' => $recordedAt->isoFormat('HHmm'),
                         'open' => $dataBlock['o'],

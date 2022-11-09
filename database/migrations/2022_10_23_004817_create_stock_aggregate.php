@@ -13,7 +13,7 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('intradays', function (Blueprint $table) {
+        Schema::create('candle_sticks', function (Blueprint $table) {
             $table->id();
 
             $table->integer('day_index')->index();
