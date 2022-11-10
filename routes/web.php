@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Day;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view(
+        'index',
+        [
+            'days' => Day::query()
+                ->with(['candleSticks'])
+                ->orderBy('day_index')
+                ->get()
+        ]
+    );
 });
