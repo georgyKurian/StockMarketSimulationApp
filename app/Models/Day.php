@@ -14,4 +14,24 @@ class Day extends Model
             ->hasMany(CandleStick::class, 'day_index', 'day_index')
             ->orderByTime();
     }
+
+    public function longStartAtCandleStick()
+    {
+        return $this->belongsTo(CandleStick::class);
+    }
+
+    public function longEndAtCandleStick()
+    {
+        return $this->belongsTo(CandleStick::class);
+    }
+
+    public function shortStartAtCandleStick()
+    {
+        return $this->belongsTo(CandleStick::class);
+    }
+
+    public function shortEndAtCandleStick()
+    {
+        return $this->belongsTo(CandleStick::class);
+    }
 }
