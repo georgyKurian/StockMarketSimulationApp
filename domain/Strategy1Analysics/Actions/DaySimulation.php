@@ -114,11 +114,13 @@ class DaySimulation
             if ($this->longPositionStage === 2) {
                 $this->longPositionStage = 3;
                 $this->longExitAtPrice = $exitCandle->open;
+                $this->longExitAtCandleStick = $exitCandle;
             }
 
             if ($this->shortPositionStage === 2) {
                 $this->shortPositionStage = 3;
                 $this->shortExitAtPrice = $exitCandle->open;
+                $this->shortExitAtCandleStick = $exitCandle;
             }
         }
 
