@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\CandleStick;
-use App\Services\PolygonClient;
 use Domain\Strategy1Analysics\Actions\DaySimulation;
 use Illuminate\Console\Command;
 
@@ -44,7 +43,6 @@ class InvestmentProjection extends Command
 
                 (new DaySimulation($intradayIndex->day_index, $intradayPoints))->execute($riskFactor);
             });
-
 
         return Command::SUCCESS;
     }

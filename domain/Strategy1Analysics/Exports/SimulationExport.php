@@ -2,12 +2,10 @@
 
 namespace Domain\Strategy1Analysics\Exports;
 
-use App\Models\Day;
 use App\Models\CandleStick;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use App\Models\Day;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class SimulationExport implements FromQuery, WithHeadings
@@ -33,12 +31,11 @@ class SimulationExport implements FromQuery, WithHeadings
         ];
     }
 
-    
     public function map(Day $day): array
     {
         return $day
             ->candleSticks()
-            ->map(function(CandleStick $candleStick) use($day) {
+            ->map(function (CandleStick $candleStick) use ($day) {
                 return [
                     $candleStick->day_index,
                     $candleStick->time,
@@ -51,5 +48,4 @@ class SimulationExport implements FromQuery, WithHeadings
                 ];
             });
     }
-
 }

@@ -13,7 +13,7 @@ class CandleStickCollection extends Collection
     }
 
     /**
-     * Filter between fromTime and toTime exclusive fo fromTime and toTime
+     * Filter between fromTime and toTime exclusive fo fromTime and toTime.
      */
     public function filterCandleSticksBetweenTime(int $fromTime, int $toTime): self
     {

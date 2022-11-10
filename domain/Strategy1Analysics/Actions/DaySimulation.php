@@ -2,8 +2,8 @@
 
 namespace Domain\Strategy1Analysics\Actions;
 
-use App\Models\Day;
 use App\Models\CandleStick;
+use App\Models\Day;
 use Domain\Strategy1Analysics\Collections\CandleStickCollection;
 
 class DaySimulation
@@ -17,7 +17,6 @@ class DaySimulation
     private ?float $longExitAtPrice;
     private ?float $longProfit;
     private int $longPositionStage;
-
 
     private ?CandleStick $shortEnterAtCandleStick;
     private ?CandleStick $shortExitAtCandleStick;
@@ -65,7 +64,7 @@ class DaySimulation
     {
         $candleStickForAnalyzing = $this->candleStickCollection->findCandleStickByTime(self::$timeIndexForAnalysis);
 
-        if (!$candleStickForAnalyzing) {
+        if (! $candleStickForAnalyzing) {
             return null;
         }
 
@@ -145,7 +144,6 @@ class DaySimulation
 
         return $this;
     }
-
 
     private function dumpReport()
     {
