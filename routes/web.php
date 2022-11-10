@@ -21,7 +21,7 @@ Route::get('/', function () {
             'days' => Day::query()
                 ->with(['candleSticks'])
                 ->orderBy('day_index')
-                ->get()
+                ->get(),
         ]
     );
 });

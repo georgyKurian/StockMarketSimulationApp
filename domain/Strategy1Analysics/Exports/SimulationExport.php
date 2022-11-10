@@ -35,8 +35,7 @@ class SimulationExport implements FromQuery, WithHeadings, WithMapping
     }
 
     /**
-     * 
-     * @param Day $day 
+     * @param Day $day
      */
     public function map($day): array
     {
