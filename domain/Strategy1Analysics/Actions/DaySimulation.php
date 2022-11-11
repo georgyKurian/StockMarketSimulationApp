@@ -68,8 +68,8 @@ class DaySimulation
             return null;
         }
 
-        $this->longEnterAtCandleStick = $candleStickForAnalyzing;
-        $this->shortEnterAtCandleStick = $candleStickForAnalyzing;
+        $this->longEnterAtCandleStick = null;
+        $this->shortEnterAtCandleStick = null;
 
         $this->longEnterAtPrice = $candleStickForAnalyzing->high + $bufferSize;
         $this->shortEnterAtPrice = $candleStickForAnalyzing->low - $bufferSize;
@@ -148,13 +148,25 @@ class DaySimulation
     private function dumpReport()
     {
         dump([
-            // 'index' => $this->dayIndex,
+            'index' => $this->dayIndex,
             // 'Long Enter at Price' => $this->longEnterAtPrice,
             // 'Long Exit at Price' => $this->longExitAtPrice,
             // 'Profit Long' => $this->longProfit,
             // 'Short Enter at Price' => $this->shortEnterAtPrice,
             // 'Short Exit at Price' => $this->shortExitAtPrice,
             // 'profit Short' => $this->shortProfit,
+
+            'long_start_at_candle_stick_id' => $this->longEnterAtCandleStick?->id,
+            'long_end_at_candle_stick_id' => $this->longExitAtCandleStick?->id,
+            // 'long_enter_at_price' => $this->longEnterAtPrice,
+            // 'long_exit_at_price' => $this->longExitAtPrice,
+            // 'long_profit' => $this->longProfit,
+
+            'short_start_at_candle_stick_id' => $this->shortEnterAtCandleStick?->id,
+            'short_end_at_candle_stick_id' => $this->shortExitAtCandleStick?->id,
+            // 'short_enter_at_price' => $this->shortEnterAtPrice,
+            // 'short_exit_at_price' => $this->shortExitAtPrice,
+            // 'short_profit' => $this->shortProfit,
 
             'Total Profit' => $this->totalProfit,
         ]);
