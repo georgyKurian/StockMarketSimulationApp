@@ -35,13 +35,14 @@ class InvestmentProjection extends Command
             ->distinct()
             ->orderBy('day_index')
             ->get(['day_index'])
-            ->each(function (CandleStick $intradayIndex) use ($riskFactor) {
-                $intradayPoints = CandleStick::where('day_index', $intradayIndex->day_index)
+            ->pluck('day_index')
+            ->each(function (int $dayIndex) use ($riskFactor) {
+                $candleSticks = CandleStick::where('day_index', $dayIndex)
                     ->where('time', '>=', 1000)
-                    ->oldest('recorded_at')
+                    ->orderByTime()
                     ->get();
 
-                (new DaySimulation($intradayIndex->day_index, $intradayPoints))->execute($riskFactor);
+                (new DaySimulation($dayIndex, $candleSticks))->execute($riskFactor);
             });
 
         return Command::SUCCESS;
