@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DayController;
+use App\Http\Controllers\SimulationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ReportController::class, 'index']);
+Route::get('/', [SimulationController::class, 'index']);
+Route::get('/days', [DayController::class, 'index']);
