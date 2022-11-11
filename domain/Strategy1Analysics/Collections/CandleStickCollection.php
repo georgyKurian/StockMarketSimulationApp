@@ -9,7 +9,7 @@ class CandleStickCollection extends Collection
 {
     public function findCandleStickByTime(int $time): ?CandleStick
     {
-        return $this->firstWhere(fn (CandleStick $intraday) => $intraday->firstWhere('time', 1000));
+        return $this->firstWhere(fn (CandleStick $candleStick) => $candleStick->time === $time);
     }
 
     /**
@@ -17,7 +17,7 @@ class CandleStickCollection extends Collection
      */
     public function filterCandleSticksBetweenTime(int $fromTime, int $toTime): self
     {
-        return $this->where(fn (CandleStick $intraday) => $fromTime < $intraday->time && $intraday->time < $toTime);
+        return $this->where(fn (CandleStick $candleStick) => $fromTime < $candleStick->time && $candleStick->time < $toTime);
     }
 
     public function orderByTime()
