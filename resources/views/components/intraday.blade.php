@@ -1,31 +1,32 @@
-<div class="m-4 p-4 bg-white overflow-hidden">
-    <table>
-        <thead>
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg m-4">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>Day</td>
-                <td>Time</td>
-                <td>High</td>
-                <td>Low</td>
-                <td>Long Enter</td>
-                <td>Long Exit</td>
-                <td>Short Enter</td>
-                <td>Short Exit</td>
+                <th scope="col" class="py-3 px-6">Day</th>
+                <th scope="col" class="py-3 px-6">Time</th>
+                <th scope="col" class="py-3 px-6">High</th>
+                <th scope="col" class="py-3 px-6">Low</th>
+                <th scope="col" class="py-3 px-6">Long Enter</th>
+                <th scope="col" class="py-3 px-6">Long Exit</th>
+                <th scope="col" class="py-3 px-6">Short Enter</th>
+                <th scope="col" class="py-3 px-6">Short Exit</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($intraday->candleSticks as $candleStick)
-                <tr>
-                    <td>{{ $intraday->day_index }}</td>
-                    <td>{{ $candleStick->time }}</td>
-                    <td>{{ $candleStick->high }}</td>
-                    <td>{{ $candleStick->low }}</td>
-                    <td>{{ $candleStick->day_index }}Long Enter</td>
-                    <td>{{ $candleStick->day_index }}Long Exit</td>
-                    <td>{{ $candleStick->day_index }}Short Enter</td>
-                    <td>{{ $candleStick->day_index }}Short Exit</td>
+            @foreach ($candleSticks as $candleStick)
+                <tr class="{{ $loop->odd ? 'bg-white border-b dark:bg-gray-900 dark:border-gray-700' : 'bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700'}}">
+                    <td class="py-4 px-6">{{ $candleStick['id'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['time'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['high'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['low'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['long_enter_at'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['long_exit_at'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['short_enter_at'] }}</td>
+                    <td class="py-4 px-6">{{ $candleStick['short_exit_at'] }}</td>
                 </tr>
             @endforeach
         </tbody>
-        
     </table>
 </div>
+           
+        

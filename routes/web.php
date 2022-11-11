@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Day;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view(
-        'index',
-        [
-            'days' => Day::query()
-                ->with(['candleSticks'])
-                ->orderBy('day_index')
-                ->get(),
-        ]
-    );
-});
+Route::get('/', [ReportController::class, 'index']);

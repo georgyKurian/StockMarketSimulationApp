@@ -1,5 +1,3 @@
 <x-layout.default>
-    @foreach ($days as $day)
-        <x-intraday :intraday="$day"/>
-    @endforeach
+    <x-intraday :candleSticks="$candleSticks"/>
 </x-layout.default>
