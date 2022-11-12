@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace Services;
 
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use PolygonIO\Rest\Rest;
@@ -17,6 +18,8 @@ class PolygonClient
 
     public function getStockAggregates(String $tickerSymbol, int $multiplier, String $timespan, Carbon $from, Carbon $to)
     {
+        throw_if($from->lessThanOrEqualTo($to), new Exception('From date should be less than to date'));
+
         return $this
             ->rest
             ->stocks()

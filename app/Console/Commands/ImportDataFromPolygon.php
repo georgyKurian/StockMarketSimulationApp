@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\CandleStick;
-use App\Services\PolygonClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Services\PolygonClient;
 
 class ImportDataFromPolygon extends Command
 {
