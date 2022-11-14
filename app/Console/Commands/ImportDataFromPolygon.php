@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\CandleStick;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Services\PolygonClient;
+use Services\MarketDataService\PolygonIo\PolygonClient;
 
 class ImportDataFromPolygon extends Command
 {
@@ -32,6 +32,9 @@ class ImportDataFromPolygon extends Command
     {
         $data = $polygonClient->getStockAggregates('VOO', multiplier:15, timespan:'minute', from:new Carbon('2021-10-20'), to:new Carbon('2022-10-20'));
 
+        $length = count($data['results']);
+        //dd(Carbon::parse($data['results'][$length-1]['timestamp']/1000)->toDateTimeString());
+        dd($data['results'][$length-1]);
         collect($data['results'])
             ->each(function ($dataBlock) {
                 $recordedAt = new Carbon($dataBlock['t'] / 1000);
