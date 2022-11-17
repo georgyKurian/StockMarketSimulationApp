@@ -33,6 +33,10 @@ class DaySimulation
 
     public function execute(float $bufferSize)
     {
+        if ($this->candleStickCollection->count() <= 2) {
+            return;
+        }
+
         $this
             ->initialize()
             ->computeEntryAndExitCriteria($bufferSize)

@@ -30,7 +30,7 @@ class ImportDataFromPolygon extends Command
     public function handle()
     {
         $fromDate = Carbon::today()->subYears(2);
-        $toDate = Carbon::tomorrow();
+        $toDate = Carbon::yesterday();
 
         $loopFromDate = $fromDate->copy();
         $loopToDate = $fromDate->copy()->addMonths(3);

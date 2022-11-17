@@ -13,7 +13,7 @@ class InvestmentProjection extends Command
      *
      * @var string
      */
-    protected $signature = 'investment-projection:start {percentage}';
+    protected $signature = 'investment-projection:start {threshold}';
 
     /**
      * The console command description.
@@ -29,20 +29,19 @@ class InvestmentProjection extends Command
      */
     public function handle()
     {
-        $riskFactor = $this->argument('percentage');
+        $threshold = $this->argument('threshold');
 
         CandleStick::query()
             ->distinct()
             ->orderBy('day_index')
-            ->get(['day_index'])
-            ->pluck('day_index')
-            ->each(function (int $dayIndex) use ($riskFactor) {
-                $candleSticks = CandleStick::where('day_index', $dayIndex)
+            ->each(function (CandleStick $candleStick, $key) use ($threshold) {
+                $candleSticks = CandleStick::where('day_index', $candleStick->day_index)
                     ->where('time', '>=', 1000)
+                    ->whereNotNull('volume')
                     ->orderByTime()
                     ->get();
 
-                (new DaySimulation($dayIndex, $candleSticks))->execute($riskFactor);
+                (new DaySimulation($candleStick->day_index, $candleSticks))->execute($threshold);
             });
 
         return Command::SUCCESS;
