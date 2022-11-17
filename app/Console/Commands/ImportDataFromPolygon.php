@@ -3,11 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ImportStockCandleStickDataJob;
-use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Bus;
-use Throwable;
 
 class ImportDataFromPolygon extends Command
 {
@@ -49,7 +46,7 @@ class ImportDataFromPolygon extends Command
             $loopToDate = $loopToDate->copy()->addMonths(3);
         }
 
-        $this->info("Started importing!");
+        $this->info('Started importing!');
 
         return Command::SUCCESS;
     }

@@ -5,11 +5,9 @@ namespace App\Jobs;
 use App\Models\CandleStick;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
@@ -56,7 +54,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
                 from: $this->from,
                 to: $this->to
             );
-        
+
         $dataCollection
             ->each(function (StockCandleStickData $dataBlock) {
                 if ($this->isDuringTradeHours($dataBlock->startTime)) {

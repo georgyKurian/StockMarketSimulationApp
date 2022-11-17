@@ -33,6 +33,6 @@ class MarketDataServiceProvider extends ServiceProvider
     {
         RateLimiter::for('polygon_io', function ($job) {
             return Limit::perMinute(3);
-    });
+        });
     }
 }

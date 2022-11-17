@@ -8,10 +8,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use PolygonIO\Rest\Rest;
 use Services\MarketDataService\Client;
 use Services\MarketDataService\DataTransferObjects\StockCandleStickData;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class PolygonClient extends Client
 {
@@ -35,21 +33,20 @@ class PolygonClient extends Client
 
         $response = $this
             ->client
-            ->get("v2/aggs/ticker/{$tickerSymbol}/range/{$multiplier}/{$timespan}/{$from->toDateString()}/{$to->toDateString()}",[
+            ->get("v2/aggs/ticker/{$tickerSymbol}/range/{$multiplier}/{$timespan}/{$from->toDateString()}/{$to->toDateString()}", [
                 'adjusted' =>true,
                 'sort'=>'asc',
-                'limit' => 50000
+                'limit' => 50000,
             ]);
-            
-        
+
         if ($response->failed() && $response->status() == 429) {
             throw new Exception('Too many requests in a minute');
         }
 
-        if($response->ok()){
+        if ($response->ok()) {
             $responseData = json_decode($response->body());
 
-            if($responseData && is_array($responseData) && array_key_exists('results',$responseData)){
+            if ($responseData && is_array($responseData) && array_key_exists('results', $responseData)) {
                 foreach ($responseData['results'] as $candleStickData) {
                     $candleStickCollection->add(
                         new StockCandleStickData(
@@ -66,7 +63,6 @@ class PolygonClient extends Client
                 }
             }
         }
-           
 
         return $candleStickCollection;
     }
