@@ -3,14 +3,12 @@
 namespace Services\MarketDataService\PolygonIo;
 
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use PolygonIO\Rest\Rest;
 use Services\MarketDataService\Client;
 use Services\MarketDataService\DataTransferObjects\StockCandleStickData;
-use Throwable;
 
 class PolygonClient extends Client
 {
@@ -26,7 +24,7 @@ class PolygonClient extends Client
         throw_if($from->greaterThanOrEqualTo($to), new Exception('From date should be less than to date'));
 
         /** @var Collection<StockCandleStickData> */
-        $candleStickCollection  = collect();
+        $candleStickCollection = collect();
 
         $responseData = $this
             ->rest
@@ -38,12 +36,11 @@ class PolygonClient extends Client
                 timespan:$timespan,
                 from:$from->toDateString(),
                 to:$to->toDateString(),
-                params:['limit' => 10000],
+                params:['limit' => 50000],
             );
 
-        dd(array_keys($responseData));
-        if($responseData['results']) {
-            foreach($responseData['results'] as $candleStickData){
+        if ($responseData['results']) {
+            foreach ($responseData['results'] as $candleStickData) {
                 $candleStickCollection->add(
                     new StockCandleStickData(
                         startTimestamp: $candleStickData['t'],
@@ -52,8 +49,8 @@ class PolygonClient extends Client
                         low: $candleStickData['l'],
                         close: $candleStickData['c'],
                         volume: $candleStickData['v'],
-                        numberOfTransactions: $candleStickData['n'],
-                        volumeWeightedAveragePrice: $candleStickData['vw'],
+                        numberOfTransactions: array_key_exists('n', $candleStickData) ? $candleStickData['n'] : null,
+                        volumeWeightedAveragePrice: array_key_exists('vw', $candleStickData) ? $candleStickData['vw'] : null,
                     )
                 );
             }

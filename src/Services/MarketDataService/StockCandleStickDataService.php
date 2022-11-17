@@ -2,7 +2,6 @@
 
 namespace Services\MarketDataService;
 
-use Illuminate\Support;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -16,7 +15,7 @@ class StockCandleStickDataService
     private int $multiplier;
     private String $timespan;
 
-   private Carbon $lastDateFetched;
+    private Carbon $lastDateFetched;
 
     public function __construct(private Client $client)
     {
@@ -33,8 +32,7 @@ class StockCandleStickDataService
     }
 
     /**
-     * 
-     * @return Collection<StockCandleStickData> 
+     * @return Collection<StockCandleStickData>
      */
     public function getData()
     {
@@ -54,7 +52,7 @@ class StockCandleStickDataService
 
     public function nextPage()
     {
-        if($this->lastDateFetched->lessThanOrEqualTo($this->toDate)){
+        if ($this->lastDateFetched->lessThanOrEqualTo($this->toDate)) {
             $nextFromDate = $this->lastDateFetched->copy();
         }
     }

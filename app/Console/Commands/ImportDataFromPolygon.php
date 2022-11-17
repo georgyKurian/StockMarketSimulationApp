@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CandleStick;
+use App\Jobs\ImportStockCandleStickDataJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Services\MarketDataService\PolygonIo\PolygonClient;
 
 class ImportDataFromPolygon extends Command
 {
@@ -28,38 +27,26 @@ class ImportDataFromPolygon extends Command
      *
      * @return int
      */
-    public function handle(PolygonClient $polygonClient)
+    public function handle()
     {
-        $data = $polygonClient->getStockAggregates('VOO', multiplier:15, timespan:'minute', from:new Carbon('2021-10-20'), to:new Carbon('2022-10-20'));
+        $fromDate = Carbon::parse('2021-10-10');
+        $toDate = Carbon::parse('2022-10-10');
 
-        $length = count($data['results']);
-        //dd(Carbon::parse($data['results'][$length-1]['timestamp']/1000)->toDateTimeString());
-        dd($data['results'][$length-1]);
-        collect($data['results'])
-            ->each(function ($dataBlock) {
-                $recordedAt = new Carbon($dataBlock['t'] / 1000);
+        $loopFromDate = $fromDate->copy();
+        $loopToDate = $fromDate->copy()->addMonths(3);
 
-                if ($this->isDuringTradeHours($recordedAt)) {
-                    CandleStick::create([
-                        'day_index' => $recordedAt->isoFormat('YMMDD'),
-                        'time' => $recordedAt->isoFormat('HHmm'),
-                        'open' => $dataBlock['o'],
-                        'high' => $dataBlock['h'],
-                        'low' => $dataBlock['l'],
-                        'close' => $dataBlock['c'],
-                        'volume' => $dataBlock['v'],
-                        'vw_avg_price' => $dataBlock['vw'],
-                        'recorded_at' => $recordedAt,
-                    ]);
-                }
-            });
+        while ($loopFromDate->lessThan($toDate)) {
+            if ($loopToDate->greaterThan($toDate)) {
+                $loopToDate = $toDate->copy();
+            }
+
+            ImportStockCandleStickDataJob::dispatch($loopFromDate, $loopToDate);
+
+            dump($loopFromDate->toDateTimeString());
+            $loopFromDate = $loopToDate->copy();
+            $loopToDate = $loopToDate->copy()->addMonths(3);
+        }
 
         return Command::SUCCESS;
-    }
-
-    public function isDuringTradeHours(Carbon $dateTime)
-    {
-        return
-            ($dateTime->hour > 9 && $dateTime->hour < 16) || ($dateTime->hour == 9 && $dateTime->minute >= 30);
     }
 }

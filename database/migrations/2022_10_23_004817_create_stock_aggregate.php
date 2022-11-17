@@ -25,7 +25,7 @@ return new class() extends Migration {
             $table->text('volume');
             $table->text('vw_avg_price')->nullable();
 
-            $table->dateTime('recorded_at');
+            $table->dateTime('recorded_at')->unique();
 
             $table->timestamps();
         });
