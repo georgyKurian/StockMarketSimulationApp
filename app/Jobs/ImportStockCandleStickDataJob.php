@@ -22,6 +22,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public $tries = 0;
     public $maxExceptions = 3;
 
     public function __construct(private Carbon $from, private Carbon $to)
@@ -30,7 +31,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
 
     public function retryUntil()
     {
-        return now()->addMinutes(1);
+        return now()->addHour();
     }
 
     public function middleware()
