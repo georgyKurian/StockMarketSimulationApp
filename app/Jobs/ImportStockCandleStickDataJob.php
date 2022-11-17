@@ -22,7 +22,6 @@ class ImportStockCandleStickDataJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public $tries = 0;
     public $maxExceptions = 3;
 
     public function __construct(private Carbon $from, private Carbon $to)
@@ -36,7 +35,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
 
     public function middleware()
     {
-        return [(new RateLimitedWithRedis('polygon_io'))];
+        return [new RateLimitedWithRedis('polygon_io')];
     }
 
     /**
