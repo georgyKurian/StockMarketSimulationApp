@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Services\MarketDataService\Client;
 use Services\MarketDataService\PolygonIo\PolygonClient;
@@ -29,6 +31,8 @@ class MarketDataServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        RateLimiter::for('polygon_io', function ($job) {
+            return Limit::perMinute(3);
+    });
     }
 }

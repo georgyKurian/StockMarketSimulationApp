@@ -3,8 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ImportStockCandleStickDataJob;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Bus;
+use Throwable;
 
 class ImportDataFromPolygon extends Command
 {
@@ -29,8 +32,8 @@ class ImportDataFromPolygon extends Command
      */
     public function handle()
     {
-        $fromDate = Carbon::parse('2021-10-10');
-        $toDate = Carbon::parse('2022-10-10');
+        $fromDate = Carbon::today()->subYears(2);
+        $toDate = Carbon::tomorrow();
 
         $loopFromDate = $fromDate->copy();
         $loopToDate = $fromDate->copy()->addMonths(3);
@@ -42,10 +45,11 @@ class ImportDataFromPolygon extends Command
 
             ImportStockCandleStickDataJob::dispatch($loopFromDate, $loopToDate);
 
-            dump($loopFromDate->toDateTimeString());
             $loopFromDate = $loopToDate->copy();
             $loopToDate = $loopToDate->copy()->addMonths(3);
         }
+
+        $this->info("Started importing!");
 
         return Command::SUCCESS;
     }
