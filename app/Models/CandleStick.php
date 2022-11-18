@@ -17,7 +17,7 @@ class CandleStick extends Model
         'close' => 'float',
         'volume' => 'float',
         'vw_avg_price' => 'float',
-        'recorded_at' => 'float',
+        'recorded_at' => 'datetime',
     ];
 
     public function newCollection(array $models = []): CandleStickCollection
