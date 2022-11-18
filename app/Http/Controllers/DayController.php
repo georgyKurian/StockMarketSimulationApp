@@ -34,7 +34,7 @@ class DayController extends Controller
                 'summary' => [
                     'total_long_profit' => number_format($simulationSummary->total_long_profit, 2),
                     'total_short_profit' => number_format($simulationSummary->total_short_profit, 2),
-                    'subtotal' => number_format($simulationSummary->total_long_profit + $simulationSummary->total_short_profit, 2)
+                    'subtotal' => number_format($simulationSummary->total_long_profit + $simulationSummary->total_short_profit, 2),
                 ],
                 'links' =>  $daysPaginate->links(),
             ]
