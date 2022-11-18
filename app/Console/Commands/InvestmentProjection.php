@@ -32,6 +32,7 @@ class InvestmentProjection extends Command
         $threshold = $this->argument('threshold');
 
         CandleStick::query()
+            ->select('day_index')
             ->distinct()
             ->orderBy('day_index')
             ->each(function (CandleStick $candleStick, $key) use ($threshold) {
