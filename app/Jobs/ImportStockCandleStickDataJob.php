@@ -25,7 +25,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
     public $tries = 0;
     public $maxExceptions = 3;
 
-    public function __construct(private Carbon $from, private Carbon $to)
+    public function __construct(private String $tickerSymbol, private Carbon $from, private Carbon $to)
     {
     }
 
@@ -48,7 +48,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
     {
         $dataCollection = $client
             ->getStockAggregates(
-                tickerSymbol: 'VOO',
+                tickerSymbol: $this->tickerSymbol,
                 multiplier:15,
                 timespan:'minute',
                 from: $this->from,
@@ -57,19 +57,19 @@ class ImportStockCandleStickDataJob implements ShouldQueue
 
         $dataCollection
             ->each(function (StockCandleStickData $dataBlock) {
-                if ($this->isDuringTradeHours($dataBlock->startTime)) {
-                    CandleStick::updateOrCreate([
-                        'day_index' => $dataBlock->startTime->isoFormat('YMMDD'),
-                        'time' => $dataBlock->startTime->isoFormat('HHmm'),
-                        'open' => $dataBlock->open,
-                        'high' => $dataBlock->high,
-                        'low' => $dataBlock->low,
-                        'close' => $dataBlock->close,
-                        'volume' => $dataBlock->volume,
-                        'vw_avg_price' => $dataBlock->volumeWeightedAveragePrice,
-                        'recorded_at' => $dataBlock->startTime,
-                    ]);
-                }
+                //if ($this->isDuringTradeHours($dataBlock->startTime)) {
+                CandleStick::updateOrCreate([
+                    'day_index' => $dataBlock->startTime->isoFormat('YMMDD'),
+                    'time' => $dataBlock->startTime->isoFormat('HHmm'),
+                    'open' => $dataBlock->open,
+                    'high' => $dataBlock->high,
+                    'low' => $dataBlock->low,
+                    'close' => $dataBlock->close,
+                    'volume' => $dataBlock->volume,
+                    'vw_avg_price' => $dataBlock->volumeWeightedAveragePrice,
+                    'recorded_at' => $dataBlock->startTime,
+                ]);
+                //}
             });
     }
 

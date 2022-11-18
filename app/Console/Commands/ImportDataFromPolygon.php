@@ -13,7 +13,7 @@ class ImportDataFromPolygon extends Command
      *
      * @var string
      */
-    protected $signature = 'polygon:import';
+    protected $signature = 'polygon:import {tickerSymbol}';
 
     /**
      * The console command description.
@@ -29,6 +29,7 @@ class ImportDataFromPolygon extends Command
      */
     public function handle()
     {
+        $tickerSymbol = $this->argument('tickerSymbol');
         $fromDate = Carbon::today()->subYears(2);
         $toDate = Carbon::yesterday();
 
@@ -40,7 +41,7 @@ class ImportDataFromPolygon extends Command
                 $loopToDate = $toDate->copy();
             }
 
-            ImportStockCandleStickDataJob::dispatch($loopFromDate, $loopToDate);
+            ImportStockCandleStickDataJob::dispatch($tickerSymbol, $loopFromDate, $loopToDate);
 
             $loopFromDate = $loopToDate->copy();
             $loopToDate = $loopToDate->copy()->addMonths(3);
