@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Strategy1Analysics\Collections;
+namespace Domain\Stock\Collections;
 
 use App\Models\CandleStick;
 use Illuminate\Database\Eloquent\Collection;

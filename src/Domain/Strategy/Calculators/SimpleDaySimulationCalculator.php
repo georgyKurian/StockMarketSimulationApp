@@ -1,12 +1,13 @@
 <?php
 
-namespace Domain\Strategy1Analysics\Actions;
+namespace Domain\Strategy\Calculators;
 
 use App\Models\CandleStick;
-use App\Models\Day;
-use Domain\Strategy1Analysics\Collections\CandleStickCollection;
+use App\Models\Simulation;
+use Domain\Stock\Collections\CandleStickCollection;
+use Domain\Stock\DataTransferObjects\DaySimulationResultData;
 
-class DaySimulation
+class SimpleDaySimulationCalculator
 {
     private static int $timeIndexForAnalysis = 1000;
     private static int $exitTime = 1545;
@@ -15,35 +16,31 @@ class DaySimulation
     private ?CandleStick $longExitAtCandleStick;
     private ?float $longEnterAtPrice;
     private ?float $longExitAtPrice;
-    private ?float $longProfit;
+    private float $longProfit = 0;
     private int $longPositionStage;
 
     private ?CandleStick $shortEnterAtCandleStick;
     private ?CandleStick $shortExitAtCandleStick;
     private ?float $shortEnterAtPrice;
     private ?float $shortExitAtPrice;
-    private ?float $shortProfit;
+    private float $shortProfit = 0.0;
     private int $shortPositionStage;
 
-    private ?float $totalProfit;
+    private float $totalProfit = 0.0;
 
-    public function __construct(private int $dayIndex, private CandleStickCollection $candleStickCollection)
+    public function __construct(private int $dayIndex, private  CandleStickCollection $candleStickCollection, private  Simulation $simulation)
     {
     }
 
-    public function execute(float $bufferSize)
+    public function calculate(): ?DaySimulationResultData
     {
-        if ($this->candleStickCollection->count() <= 2) {
-            return;
-        }
-
-        $this
+        return $this
             ->initialize()
-            ->computeEntryAndExitCriteria($bufferSize)
+            ->computeEntryAndExitCriteria()
             ?->simulateRestOfTheDay()
             ?->calculateProfitOrLoss()
             //?->dumpReport();
-            ?->saveReportToDatabase();
+            ?->getResults();
     }
 
     private function initialize()
@@ -52,11 +49,15 @@ class DaySimulation
         $this->longExitAtCandleStick = null;
         $this->longEnterAtPrice = null;
         $this->longExitAtPrice = null;
+        $this->longProfit = 0.0;
 
         $this->shortEnterAtCandleStick = null;
         $this->shortExitAtCandleStick = null;
         $this->shortEnterAtPrice = null;
         $this->shortExitAtPrice = null;
+        $this->shortProfit = 0.0;
+
+        $this->totalProfit = 0.0;
 
         $this->longPositionStage = 1;
         $this->shortPositionStage = 1;
@@ -64,7 +65,7 @@ class DaySimulation
         return $this;
     }
 
-    private function computeEntryAndExitCriteria(float $bufferSize)
+    private function computeEntryAndExitCriteria()
     {
         $candleStickForAnalyzing = $this->candleStickCollection->findCandleStickByTime(self::$timeIndexForAnalysis);
 
@@ -75,8 +76,8 @@ class DaySimulation
         $this->longEnterAtCandleStick = null;
         $this->shortEnterAtCandleStick = null;
 
-        $this->longEnterAtPrice = $candleStickForAnalyzing->high + $bufferSize;
-        $this->shortEnterAtPrice = $candleStickForAnalyzing->low - $bufferSize;
+        $this->longEnterAtPrice = $candleStickForAnalyzing->high + $this->simulation->threshold;
+        $this->shortEnterAtPrice = $candleStickForAnalyzing->low - $this->simulation->threshold;
 
         return $this;
     }
@@ -130,7 +131,7 @@ class DaySimulation
         return $this;
     }
 
-    public function calculateProfitOrLoss()
+    private function calculateProfitOrLoss()
     {
         if ($this->longExitAtPrice && $this->longEnterAtPrice) {
             $this->longProfit = $this->longExitAtPrice - $this->longEnterAtPrice;
@@ -176,24 +177,21 @@ class DaySimulation
         ]);
     }
 
-    private function saveReportToDatabase()
+    private function getResults(): DaySimulationResultData
     {
-        Day::create([
-            'day_index' => $this->dayIndex,
-
-            'long_start_at_candle_stick_id' => $this->longEnterAtCandleStick?->id,
-            'long_end_at_candle_stick_id' => $this->longExitAtCandleStick?->id,
-            'long_enter_at_price' => $this->longEnterAtPrice,
-            'long_exit_at_price' => $this->longExitAtPrice,
-            'long_profit' => $this->longProfit,
-
-            'short_start_at_candle_stick_id' => $this->shortEnterAtCandleStick?->id,
-            'short_end_at_candle_stick_id' => $this->shortExitAtCandleStick?->id,
-            'short_enter_at_price' => $this->shortEnterAtPrice,
-            'short_exit_at_price' => $this->shortExitAtPrice,
-            'short_profit' => $this->shortProfit,
-
-            'total_profit' => $this->totalProfit,
-        ]);
+        return
+            new DaySimulationResultData(
+                longEnterAtCandleStick: $this->longEnterAtCandleStick,
+                longExitAtCandleStick: $this->longExitAtCandleStick,
+                longEnterAtPrice: $this->longEnterAtPrice,
+                longExitAtPrice: $this->longExitAtPrice,
+                longProfit: $this->longProfit,
+                shortEnterAtCandleStick: $this->shortEnterAtCandleStick,
+                shortExitAtCandleStick: $this->shortExitAtCandleStick,
+                shortEnterAtPrice: $this->shortEnterAtPrice,
+                shortExitAtPrice: $this->shortExitAtPrice,
+                shortProfit: $this->shortProfit,
+                totalProfit: $this->totalProfit,
+            );
     }
 }

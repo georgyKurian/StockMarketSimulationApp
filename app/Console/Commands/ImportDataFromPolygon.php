@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ImportStockCandleStickDataJob;
+use App\Models\Ticker;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
@@ -30,6 +31,8 @@ class ImportDataFromPolygon extends Command
     public function handle()
     {
         $tickerSymbol = $this->argument('tickerSymbol');
+        $ticker = Ticker::findOrFailBySymbol($tickerSymbol);
+
         $fromDate = Carbon::today()->subYears(2);
         $toDate = Carbon::yesterday();
 
@@ -41,7 +44,7 @@ class ImportDataFromPolygon extends Command
                 $loopToDate = $toDate->copy();
             }
 
-            ImportStockCandleStickDataJob::dispatch($tickerSymbol, $loopFromDate, $loopToDate);
+            ImportStockCandleStickDataJob::dispatch($ticker, $loopFromDate, $loopToDate);
 
             $loopFromDate = $loopToDate->copy();
             $loopToDate = $loopToDate->copy()->addMonths(3);

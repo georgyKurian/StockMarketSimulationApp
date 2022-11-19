@@ -2,13 +2,11 @@
 
 namespace Services\MarketDataService;
 
+use App\Models\Ticker;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Services\MarketDataService\DataTransferObjects\StockAggregatesData;
 
 abstract class Client
 {
-    /**
-     * @return Collection<StockCandleStickData>
-     */
-    abstract public function getStockAggregates(String $tickerSymbol, int $multiplier, String $timespan, Carbon $from, Carbon $to);
+    abstract public function getStockAggregates(Ticker $ticker, int $multiplier, String $timespan, Carbon $from, Carbon $to): StockAggregatesData;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Strategy1Analysics\Exports;
+namespace Domain\Stock\Exports;
 
 use App\Models\CandleStick;
 use App\Models\Day;

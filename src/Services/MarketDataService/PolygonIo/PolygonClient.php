@@ -2,6 +2,7 @@
 
 namespace Services\MarketDataService\PolygonIo;
 
+use App\Models\Ticker;
 use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
@@ -11,12 +12,14 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Services\MarketDataService\Client;
+use Services\MarketDataService\DataTransferObjects\StockAggregatesData;
 use Services\MarketDataService\DataTransferObjects\StockCandleStickData;
 
 class PolygonClient extends Client
 {
     private PendingRequest $client;
     private Response $response;
+    private Ticker $ticker;
 
     private const BASE_URL = 'https://api.polygon.io/';
 
@@ -28,13 +31,14 @@ class PolygonClient extends Client
             ->withToken(Config::get('market-data-service.polygon_io.key'));
     }
 
-    public function getStockAggregates(String $tickerSymbol, int $multiplier, String $timespan, Carbon $from, Carbon $to)
+    public function getStockAggregates(Ticker $ticker, int $multiplier, String $timespan, Carbon $from, Carbon $to): StockAggregatesData
     {
         throw_if($from->greaterThanOrEqualTo($to), new Exception('From date should be less than to date'));
 
+        $this->ticker = $ticker;
         $this->response = $this
             ->client
-            ->get("v2/aggs/ticker/{$tickerSymbol}/range/{$multiplier}/{$timespan}/{$from->toDateString()}/{$to->toDateString()}", [
+            ->get("v2/aggs/ticker/{$ticker->symbol}/range/{$multiplier}/{$timespan}/{$from->toDateString()}/{$to->toDateString()}", [
                 'adjusted' =>true,
                 'sort'=>'asc',
                 'limit' => 50000,
@@ -62,10 +66,7 @@ class PolygonClient extends Client
         return $this;
     }
 
-    /**
-     * @return Collection<StockCandleStickData>
-     */
-    private function parseResponseBody()
+    private function parseResponseBody(): StockAggregatesData
     {
         /** @var Collection<StockCandleStickData> */
         $candleStickCollection = collect();
@@ -93,6 +94,9 @@ class PolygonClient extends Client
             );
         }
 
-        return $candleStickCollection;
+        return new StockAggregatesData(
+            $this->ticker,
+            $candleStickCollection,
+        );
     }
 }

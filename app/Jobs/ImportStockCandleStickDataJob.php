@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\CandleStick;
+use App\Models\Ticker;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,7 +26,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
     public $tries = 0;
     public $maxExceptions = 3;
 
-    public function __construct(private String $tickerSymbol, private Carbon $from, private Carbon $to)
+    public function __construct(private Ticker $ticker, private Carbon $from, private Carbon $to)
     {
     }
 
@@ -46,19 +47,21 @@ class ImportStockCandleStickDataJob implements ShouldQueue
      */
     public function handle(Client $client)
     {
-        $dataCollection = $client
+        $stockAggregateData = $client
             ->getStockAggregates(
-                tickerSymbol: $this->tickerSymbol,
+                ticker: $this->ticker,
                 multiplier:15,
                 timespan:'minute',
                 from: $this->from,
                 to: $this->to
             );
 
-        $dataCollection
-            ->each(function (StockCandleStickData $dataBlock) {
+        $stockAggregateData
+            ->stockCandleStickDataCollection
+            ->each(function (StockCandleStickData $dataBlock) use ($stockAggregateData) {
                 //if ($this->isDuringTradeHours($dataBlock->startTime)) {
                 CandleStick::updateOrCreate([
+                    'ticker_id' => $stockAggregateData->ticker->id,
                     'day_index' => $dataBlock->startTime->isoFormat('YMMDD'),
                     'time' => $dataBlock->startTime->isoFormat('HHmm'),
                     'open' => $dataBlock->open,
