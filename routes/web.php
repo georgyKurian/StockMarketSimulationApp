@@ -16,5 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [SimulationController::class, 'index'])->name('index');
-Route::get('/days', [DayController::class, 'index'])->name('days');
+
+Route::get('/simulations', [SimulationController::class, 'index'])->name('simulations');
+Route::get('/simulations/{simulation}', [SimulationController::class, 'show'])->name('simulations.show');
+
 Route::get('/days/{day}', [DayController::class, 'show'])->name('days.show');
+
+
+
