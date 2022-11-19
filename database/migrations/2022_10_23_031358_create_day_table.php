@@ -15,6 +15,8 @@ return new class() extends Migration {
         Schema::create('days', function (Blueprint $table) {
             $table->id();
             $table->integer('day_index')->index();
+            $table->foreignId('ticker_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('simulation_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
 
             $table->text('long_enter_at_price')->nullable();
             $table->text('short_enter_at_price')->nullable();
@@ -31,6 +33,8 @@ return new class() extends Migration {
             $table->float('total_profit')->default(0.00);
 
             $table->timestamps();
+
+            $table->unique(['ticker_id', 'day_index']);
         });
     }
 

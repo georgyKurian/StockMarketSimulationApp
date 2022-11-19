@@ -8,6 +8,16 @@ class Day extends Model
 {
     use HasFactory;
 
+    public function ticker()
+    {
+        return $this->belongsTo(Ticker::class);
+    }
+
+    public function simulation()
+    {
+        return $this->belongsTo(Simulation::class);
+    }
+
     public function candleSticks()
     {
         return $this

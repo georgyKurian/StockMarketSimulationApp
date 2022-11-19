@@ -12,25 +12,16 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('candle_sticks', function (Blueprint $table) {
+        Schema::create('simulations', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('ticker_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('day_index')->index();
-            $table->integer('time');
-
-            $table->text('open');
-            $table->text('high');
-            $table->text('low');
-            $table->text('close');
-            $table->text('volume');
-            $table->text('vw_avg_price')->nullable();
-
-            $table->dateTime('recorded_at');
-
+            $table->string('threshold');
+            $table->float('long_profit')->default(0.00);
+            $table->float('short_profit')->default(0.00);
+            $table->float('total_profit')->default(0.00);
             $table->timestamps();
 
-            $table->unique(['ticker_id', 'recorded_at']);
+            $table->unique(['ticker_id', 'threshold']);
         });
     }
 
@@ -41,6 +32,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('intradays');
+        Schema::dropIfExists('simulations');
     }
 };

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Domain\Strategy1Analysics\Collections\CandleStickCollection;
-use Domain\Strategy1Analysics\QueryBuilders\CandleStickQueryBuilder;
+use Domain\Stock\Collections\CandleStickCollection;
+use Domain\Stock\QueryBuilders\CandleStickQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CandleStick extends Model
@@ -28,5 +28,10 @@ class CandleStick extends Model
     public function newEloquentBuilder($query): CandleStickQueryBuilder
     {
         return new CandleStickQueryBuilder($query);
+    }
+
+    public function ticker()
+    {
+        return $this->belongsTo(Ticker::class);
     }
 }

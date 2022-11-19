@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Strategy1Analysics\QueryBuilders;
+namespace Domain\Stock\QueryBuilders;
 
 use Illuminate\Database\Eloquent\Builder;
 
