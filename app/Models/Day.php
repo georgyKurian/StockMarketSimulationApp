@@ -22,6 +22,7 @@ class Day extends Model
     {
         return $this
             ->hasMany(CandleStick::class, 'day_index', 'day_index')
+            ->where('ticker_id', $this->ticker_id)
             ->orderByTime();
     }
 

@@ -13,7 +13,7 @@ class InvestmentProjection extends Command
      *
      * @var string
      */
-    protected $signature = 'investment-projection:start {tickerSymbol} {threshold}';
+    protected $signature = 'investment-projection:start {tickerSymbol}';
 
     /**
      * The console command description.
@@ -29,11 +29,12 @@ class InvestmentProjection extends Command
      */
     public function handle(SimulationAction $simulationAction)
     {
-        $threshold = $this->argument('threshold');
         $tickerSymbol = $this->argument('tickerSymbol');
         $ticker = Ticker::findOrFailBySymbol($tickerSymbol);
 
-        $simulationAction->execute($ticker, $threshold);
+        for ($threshold = -0.1; $threshold <= 10; $threshold = $threshold + 0.05) {
+            $simulationAction->execute($ticker, $threshold);
+        }
 
         return Command::SUCCESS;
     }

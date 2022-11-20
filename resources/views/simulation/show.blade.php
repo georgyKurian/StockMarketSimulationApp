@@ -40,12 +40,17 @@
                 <div class="overflow-x-auto relative p-4 w-full overflow-hidden">
                     <div class="text-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <div class="grid grid-cols-2">
+                            <div class="px-2 py-2">Ticker</div>
+                            <div class="px-2 py-2 text-right">
+                                <a
+                                    href="{{ route('tickers.show', $simulation['ticker']['id']) }}">{{ $simulation['ticker']['symbol'] }}</a>
+                            </div>
                             <div class="px-2 py-2">Total Long P/L</div>
-                            <div class="px-2 py-2 text-right">{{ $simulation['total_long_profit'] }}</div>
+                            <div class="px-2 py-2 text-right">{{ $simulation['long_profit'] }}</div>
                             <div class="px-2 py-2">Total Short P/L</div>
-                            <div class="px-2 py-2 text-right">{{ $simulation['total_short_profit'] }}</div>
+                            <div class="px-2 py-2 text-right">{{ $simulation['short_profit'] }}</div>
                             <div class="px-2 py-2">Sub-Total P/L</div>
-                            <div class="px-2 py-2 text-right">{{ $simulation['subtotal'] }}</div>
+                            <div class="px-2 py-2 text-right">{{ $simulation['total_profit'] }}</div>
                         </div>
                     </div>
                 </div>

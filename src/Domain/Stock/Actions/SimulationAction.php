@@ -39,6 +39,32 @@ class SimulationAction
 
                     $this->daySimulation->execute($candleStick->day_index, $candleSticks, $simulation);
                 });
+
+            $this->generateSimulationResult($simulation);
         });
+    }
+
+    private function generateSimulationResult(Simulation $simulation)
+    {
+        $aggregateResult = $simulation
+            ->days()
+            ->selectRaw('SUM(long_profit) as long_profit, SUM(short_profit) as short_profit')
+            ->first();
+
+        $longEnteredDays = $simulation
+            ->days()
+            ->where('long_profit', '!=', 0.0)
+            ->count();
+
+        $shortEnteredDays = $simulation
+            ->days()
+            ->where('short_profit', '!=', 0.0)
+            ->count();
+
+        $simulation->update([
+            'long_profit' => $aggregateResult->long_profit,
+            'short_profit' => $aggregateResult->short_profit,
+            'total_profit' => ($aggregateResult->long_profit + $aggregateResult->short_profit),
+        ]);
     }
 }

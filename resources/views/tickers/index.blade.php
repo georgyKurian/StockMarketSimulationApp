@@ -6,29 +6,28 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="py-3 px-6">id</th>
-                                <th scope="col" class="py-3 px-6">Ticker</th>
-                                <th scope="col" class="py-3 px-6">Long Profit</th>
-                                <th scope="col" class="py-3 px-6">Short Profit</th>
-                                <th scope="col" class="py-3 px-6">Total Profit</th>
-                                <th scope="col" class="py-3 px-6">Created At</th>
+                                <th scope="col" class="py-3 px-6">Id</th>
+                                <th scope="col" class="py-3 px-6">Symbol</th>
+                                <th scope="col" class="py-3 px-6">Highest Profit</th>
+                                <th scope="col" class="py-3 px-6">Number Of Simulations</th>
+                                <th scope="col" class="py-3 px-6">Date Range</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($simulations as $simulation)
+                            @foreach ($tickers as $ticker)
                                 <tr
                                     class="{{ $loop->odd ? 'bg-white border-b dark:bg-gray-900 dark:border-gray-700' : 'bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700' }}">
                                     <td class="py-1 px-6">
-                                        <a
-                                            href="{{ route('simulations.show', $simulation['id']) }}">{{ $simulation['id'] }}</a>
+                                        <a href="{{ route('tickers.show', $ticker['id']) }}">{{ $ticker['id'] }}</a>
                                     </td>
                                     <td class="py-1 px-6">
-                                        {{ $simulation['ticker_symbol'] }}</a>
+                                        <a href="{{ route('tickers.show', $ticker['id']) }}">{{ $ticker['symbol'] }}</a>
                                     </td>
-                                    <td class="py-1 px-6 text-right">{{ $simulation['long_profit'] }}</td>
-                                    <td class="py-1 px-6 text-right">{{ $simulation['short_profit'] }}</td>
-                                    <td class="py-1 px-6 text-right">{{ $simulation['total_profit'] }}</td>
-                                    <td class="py-1 px-6 text-right">{{ $simulation['created_at'] }}</td>
+                                    <td class="py-1 px-6 text-right">
+                                        {{ $ticker['highest_profit'] }}</a>
+                                    </td>
+                                    <td class="py-1 px-6 text-right">{{ $ticker['number_of_simulations'] }}</td>
+                                    <td class="py-1 px-6 text-right">{{ $ticker['date_range'] }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

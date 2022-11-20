@@ -34,7 +34,7 @@ return new class() extends Migration {
 
             $table->timestamps();
 
-            $table->unique(['ticker_id', 'day_index']);
+            $table->unique(['simulation_id', 'day_index']);
         });
     }
 

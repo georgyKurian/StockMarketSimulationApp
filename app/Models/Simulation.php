@@ -10,7 +10,7 @@ class Simulation extends Model
 
     public function days()
     {
-        return $this->hasMany(Day::class)->orderBy('day_index');
+        return $this->hasMany(Day::class);
     }
 
     public function candleSticks()

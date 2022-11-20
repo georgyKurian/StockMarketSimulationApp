@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\SimulationController;
+use App\Http\Controllers\TickerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,12 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [SimulationController::class, 'index'])->name('index');
+Route::get('/', [TickerController::class, 'index'])->name('index');
 
-Route::get('/simulations', [SimulationController::class, 'index'])->name('simulations');
+Route::get('/tickers', [TickerController::class, 'index'])->name('tickers');
+Route::get('/tickers/{ticker}', [TickerController::class, 'show'])->name('tickers.show');
+
 Route::get('/simulations/{simulation}', [SimulationController::class, 'show'])->name('simulations.show');
-
 Route::get('/days/{day}', [DayController::class, 'show'])->name('days.show');
-
-
-

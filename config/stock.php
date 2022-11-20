@@ -4,5 +4,6 @@ return [
     'tickers' => [
         'VOO',
         'SHOP',
+        'VGT',
     ],
 ];
