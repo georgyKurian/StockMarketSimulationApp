@@ -61,10 +61,20 @@ class SimulationAction
             ->where('short_profit', '!=', 0.0)
             ->count();
 
+        $longNetProfit = $aggregateResult->long_profit - ($longEnteredDays * 2 * 0.01);
+        $shortNetProfit = $aggregateResult->short_profit - ($shortEnteredDays * 2 * 0.01);
+
         $simulation->update([
             'long_profit' => $aggregateResult->long_profit,
             'short_profit' => $aggregateResult->short_profit,
             'total_profit' => ($aggregateResult->long_profit + $aggregateResult->short_profit),
+
+            'long_entered_days' => $longEnteredDays,
+            'short_entered_days' => $shortEnteredDays,
+
+            'long_net_profit' => $longNetProfit,
+            'short_net_profit' => $shortNetProfit,
+            'total_net_profit' =>  $longNetProfit + $shortNetProfit,
         ]);
     }
 }

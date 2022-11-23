@@ -34,6 +34,7 @@ class TickerController extends Controller
     {
         $simulations = $ticker
             ->simulations()
+            ->orderByDesc('total_net_profit')
             ->paginate(50);
 
         return view(
@@ -52,7 +53,16 @@ class TickerController extends Controller
                         'long_profit' => number_format($simulation->long_profit, 2),
                         'short_profit' => number_format($simulation->short_profit, 2),
                         'total_profit' => number_format($simulation->total_profit, 2),
+
+                        'short_entered_days' => $simulation->short_entered_days,
+                        'long_entered_days' => $simulation->long_entered_days,
+
+                        'long_net_profit' => number_format($simulation->long_net_profit, 2),
+                        'short_net_profit' => number_format($simulation->short_net_profit, 2),
+                        'total_net_profit' => number_format($simulation->total_net_profit, 2),
+
                         'created_at' => $simulation->created_at->format('M d, Y (h:i a)'),
+                        'date_range' => $simulation->dateRange(),
                     ]),
                 'links' =>  $simulations->links(),
             ]

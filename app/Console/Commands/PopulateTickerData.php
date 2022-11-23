@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Ticker;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 
 class PopulateTickerData extends Command
@@ -13,14 +14,14 @@ class PopulateTickerData extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:ticker-data';
+    protected $signature = 'generate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Add ticker data from config';
+    protected $description = 'Add ticker data from config and fetch the candle stick data from API';
 
     /**
      * Execute the console command.
@@ -34,6 +35,9 @@ class PopulateTickerData extends Command
         collect($tickerSymbols)
             ->each(function (String $symbol) {
                 Ticker::updateOrCreate(['symbol' => $symbol]);
+                Artisan::call('import-data', [
+                    'tickerSymbol' => $symbol,
+                ]);
             });
 
         return Command::SUCCESS;

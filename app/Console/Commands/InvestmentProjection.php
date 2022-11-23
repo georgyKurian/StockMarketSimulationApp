@@ -13,7 +13,7 @@ class InvestmentProjection extends Command
      *
      * @var string
      */
-    protected $signature = 'investment-projection:start {tickerSymbol}';
+    protected $signature = 'project {tickerSymbol}';
 
     /**
      * The console command description.
