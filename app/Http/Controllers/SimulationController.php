@@ -35,6 +35,7 @@ class SimulationController extends Controller
                     'long_profit' => number_format($simulation->long_profit, 2),
                     'short_profit' => number_format($simulation->short_profit, 2),
                     'total_profit' => number_format($simulation->total_profit, 2),
+                    'date_range' => $simulation->dateRange(),
                 ],
                 'links' =>  $days->links(),
             ]

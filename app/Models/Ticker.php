@@ -28,9 +28,13 @@ class Ticker extends Model
     public function getCandleDateRange(): String
     {
         /** type @var Carbon */
-        $from = $this->candleSticks()->oldest('recorded_at')->first()->recorded_at;
+        $from = $this->candleSticks()->oldest('recorded_at')?->first()->recorded_at;
         /** type @var Carbon */
-        $to = $this->candleSticks()->latest('recorded_at')->first()->recorded_at;
+        $to = $this->candleSticks()->latest('recorded_at')?->first()->recorded_at;
+
+        if (! $from || ! $to) {
+            return '';
+        }
 
         return $from->format('M d, Y').' - '.$to->format('M d, Y');
     }

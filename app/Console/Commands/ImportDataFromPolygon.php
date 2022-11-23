@@ -14,7 +14,7 @@ class ImportDataFromPolygon extends Command
      *
      * @var string
      */
-    protected $signature = 'polygon:import {tickerSymbol}';
+    protected $signature = 'import-data {tickerSymbol}';
 
     /**
      * The console command description.

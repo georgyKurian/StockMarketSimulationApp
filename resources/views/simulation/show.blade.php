@@ -1,6 +1,7 @@
 <x-layout.default>
     <main class="mx-auto w-full flex justify-center">
         <div class="max-w-6xl mt-8 dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+            <h1 class="text-center dark:text-white py-4 text-xl">Days</h1>
             <div class="w-full max-w-6xl dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg m-4">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">

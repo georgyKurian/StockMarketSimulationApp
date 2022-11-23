@@ -7,6 +7,7 @@ use App\Models\Simulation;
 use Domain\Stock\Collections\CandleStickCollection;
 use Domain\Stock\DataTransferObjects\DaySimulationResultData;
 use Domain\Strategy\Calculators\SimpleDaySimulationCalculator;
+use Illuminate\Support\Carbon;
 
 class DaySimulation
 {
@@ -27,6 +28,7 @@ class DaySimulation
     {
         Day::create([
             'day_index' => $dayIndex,
+            'day' => Carbon::createFromIsoFormat('YMMDD', $dayIndex),
             'ticker_id' => $simulation->ticker_id,
             'simulation_id' => $simulation->id,
             'long_start_at_candle_stick_id' => $daySimulationResultData->longEnterAtCandleStick?->id,
