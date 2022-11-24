@@ -25,6 +25,13 @@ class Ticker extends Model
         return $this->hasMany(Simulation::class);
     }
 
+    public function bestPerformingSimulation()
+    {
+        return $this
+            ->hasOne(Simulation::class)
+            ->orderByDesc('profit_percentage');
+    }
+
     public function getCandleDateRange(): String
     {
         /** type @var Carbon */

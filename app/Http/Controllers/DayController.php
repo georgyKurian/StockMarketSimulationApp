@@ -11,7 +11,7 @@ class DayController extends Controller
     public function show(Day $day)
     {
         return view(
-            'day',
+            'days.show',
             [
                 'candleSticks' => $day->candleSticks->map(function (CandleStick $candleStick) use ($day) {
                     return [

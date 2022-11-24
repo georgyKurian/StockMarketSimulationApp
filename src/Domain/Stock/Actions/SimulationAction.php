@@ -48,7 +48,7 @@ class SimulationAction
     {
         $aggregateResult = $simulation
             ->days()
-            ->selectRaw('SUM(long_profit) as long_profit, SUM(short_profit) as short_profit')
+            ->selectRaw('SUM(long_profit) as long_profit, SUM(short_profit) as short_profit, SUM(profit_percentage) as profit_percentage')
             ->first();
 
         $longEnteredDays = $simulation
@@ -68,6 +68,7 @@ class SimulationAction
             'long_profit' => $aggregateResult->long_profit,
             'short_profit' => $aggregateResult->short_profit,
             'total_profit' => ($aggregateResult->long_profit + $aggregateResult->short_profit),
+            'profit_percentage' => ($aggregateResult->profit_percentage),
 
             'long_entered_days' => $longEnteredDays,
             'short_entered_days' => $shortEnteredDays,

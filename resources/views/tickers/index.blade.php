@@ -9,6 +9,7 @@
                                 <th scope="col" class="py-3 px-6">Id</th>
                                 <th scope="col" class="py-3 px-6">Symbol</th>
                                 <th scope="col" class="py-3 px-6">Highest Profit</th>
+                                <th scope="col" class="py-3 px-6">Highest Profit Percentage</th>
                                 <th scope="col" class="py-3 px-6">Number Of Simulations</th>
                                 <th scope="col" class="py-3 px-6">Date Range</th>
                             </tr>
@@ -25,6 +26,9 @@
                                     </td>
                                     <td class="py-1 px-6 text-right">
                                         {{ $ticker['highest_profit'] }}</a>
+                                    </td>
+                                    <td class="py-1 px-6 text-right">
+                                        {{ $ticker['highest_profit_percentage'] }}</a>
                                     </td>
                                     <td class="py-1 px-6 text-right">{{ $ticker['number_of_simulations'] }}</td>
                                     <td class="py-1 px-6 text-right">{{ $ticker['date_range'] }}</td>

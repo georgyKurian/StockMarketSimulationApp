@@ -15,19 +15,34 @@ class SimulationController extends Controller
             ->orderBy('day_index')
             ->paginate(50);
 
+        $months = $simulation
+            ->days()
+            ->groupByRaw("DATE_TRUNC('year',day), DATE_TRUNC('month', day)")
+            ->selectRaw("SUM(long_profit) as long_profit, SUM(short_profit) as short_profit, SUM(total_profit) as total_profit, DATE_TRUNC('year',day) as year, DATE_TRUNC('month',day) as month")
+            ->orderBYRaw('year, month')
+            ->paginate(20, ['*'], 'days');
+
         return view(
             'simulation.show',
             [
                 'days' => $days
-                    ->transform(function (Day $day) {
-                        return [
+                    ->transform(fn (Day $day) => [
                             'id' => $day->id,
                             'date' => Carbon::createFromIsoFormat('YMMDD', $day->day_index)->toDateString(),
                             'long_profit' => number_format($day->long_profit, 2),
                             'short_profit' => number_format($day->short_profit, 2),
                             'total_profit' => number_format($day->total_profit, 2),
-                        ];
-                    }),
+                        ]),
+                'months' => [
+                    'data' => $months->transform(fn (Day $monthAggregate) => [
+                        'year' => Carbon::parse($monthAggregate->year)->year,
+                        'month' => Carbon::parse($monthAggregate->month)->monthName,
+                        'long_profit' => number_format($monthAggregate->long_profit, 2),
+                        'short_profit' => number_format($monthAggregate->short_profit, 2),
+                        'total_profit' => number_format($monthAggregate->total_profit, 2),
+                    ]),
+                    'links' => $months->links(),
+                ],
                 'simulation' => [
                     'id' => $simulation->id,
                     'ticker' => $simulation->ticker,

@@ -146,6 +146,7 @@ class SimpleDaySimulationCalculator
         }
 
         $this->totalProfit = $this->longProfit + $this->shortProfit;
+        $this->profitPercentage = $this->totalProfit * 100 / $this->longEnterAtPrice;
 
         return $this;
     }
@@ -192,6 +193,7 @@ class SimpleDaySimulationCalculator
                 shortExitAtPrice: $this->shortExitAtPrice,
                 shortProfit: $this->shortProfit,
                 totalProfit: $this->totalProfit,
+                profitPercentage: $this->profitPercentage,
             );
     }
 }

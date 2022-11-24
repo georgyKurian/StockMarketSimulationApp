@@ -16,6 +16,7 @@
 
                                 <th scope="col" class="py-3 px-6 text-right">Total Profit</th>
                                 <th scope="col" class="py-3 px-6 text-right">Total Net Profit</th>
+                                <th scope="col" class="py-3 px-6 text-right">Profit Percentage</th>
 
                                 <th scope="col" class="py-3 px-6 text-center">Date Range</th>
                                 <th scope="col" class="py-3 px-6 text-center"></th>
@@ -40,10 +41,14 @@
                                     <td class="py-1 px-6 text-right" rowspan="2">{{ $simulation['total_profit'] }}
                                     <td class="py-1 px-6 text-right" rowspan="2">
                                         {{ $simulation['total_net_profit'] }}</td>
+                                    <td class="py-1 px-6 text-right" rowspan="2">
+                                        {{ $simulation['profit_percentage'] }}
+                                    </td>
                                     <td class="py-1 px-6 text-center" rowspan="2">{{ $simulation['date_range'] }}
                                     </td>
                                     <td class="py-1 px-6 text-center" rowspan="2">
-                                        <a href="{{ route('simulations.show', $simulation['id']) }}" class="text-white px-4 py-2 bg-gray-700 rounded">Details</a>
+                                        <a href="{{ route('simulations.show', $simulation['id']) }}"
+                                            class="text-white px-4 py-2 bg-gray-700 rounded">Details</a>
                                     </td>
                                 </tr>
                                 <tr

@@ -20,6 +20,7 @@ return new class() extends Migration {
             $table->float('long_profit')->default(0.00);
             $table->float('short_profit')->default(0.00);
             $table->float('total_profit')->default(0.00);
+            $table->float('profit_percentage')->default(0.00);
 
             $table->integer('long_entered_days')->default(0);
             $table->integer('short_entered_days')->default(0);

@@ -18,6 +18,7 @@ class DaySimulationResultData
         public ?float $shortExitAtPrice,
         public float $shortProfit,
         public float $totalProfit,
+        public float $profitPercentage,
     ) {
     }
 }

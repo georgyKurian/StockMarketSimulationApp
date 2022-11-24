@@ -44,6 +44,7 @@ class DaySimulation
             'short_profit' => $daySimulationResultData->shortProfit,
 
             'total_profit' => $daySimulationResultData->totalProfit,
+            'profit_percentage' => $daySimulationResultData->profitPercentage,
         ]);
     }
 }
