@@ -6,20 +6,21 @@ use Illuminate\Database\Eloquent\Builder;
 
 class CandleStickQueryBuilder extends Builder
 {
-    public function orderByTime()
+    public function orderByDateTimeOldest(): self
     {
-        return $this->orderBy('time');
+        return $this->oldest('recorded_at');
     }
 
-    public function orderByDay()
+    public function orderByDateTimeLatest(): self
     {
-        return $this->orderBy('day_index');
+        return $this->latest('recorded_at');
     }
 
-    public function orderByDayAndTime()
+    public function onlyNormalMarketHours(): self
     {
-        return $this
-            ->orderByDay()
-            ->orderByTime();
+        $startAt = config('stock.market_hours.start') ?? 930;
+        $endAt = config('stock.market_hours.end') ?? 1600;
+
+        return $this->whereBetween('time', [$startAt, $endAt]);
     }
 }

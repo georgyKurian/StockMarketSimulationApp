@@ -2,7 +2,6 @@
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="py-3 px-6">Day</th>
                 <th scope="col" class="py-3 px-6">Time</th>
                 <th scope="col" class="py-3 px-6">Open</th>
                 <th scope="col" class="py-3 px-6">Close</th>
@@ -16,8 +15,8 @@
         </thead>
         <tbody>
             @foreach ($candleSticks as $candleStick)
-                <tr class="{{ $loop->odd ? 'bg-white border-b dark:bg-gray-900 dark:border-gray-700' : 'bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700'}}">
-                    <td class="py-1 px-6">{{ $candleStick['id'] }}</td>
+                <tr
+                    class="{{ $loop->odd ? 'bg-white border-b dark:bg-gray-900 dark:border-gray-700' : 'bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700' }}">
                     <td class="py-1 px-6">{{ $candleStick['time'] }}</td>
                     <td class="py-1 px-6">{{ $candleStick['open'] }}</td>
                     <td class="py-1 px-6">{{ $candleStick['close'] }}</td>
@@ -32,6 +31,3 @@
         </tbody>
     </table>
 </div>
-
-           
-        

@@ -14,7 +14,7 @@ return new class() extends Migration {
     {
         Schema::create('days', function (Blueprint $table) {
             $table->id();
-            $table->integer('day_index')->index();
+
             $table->date('day')->index();
             $table->foreignId('ticker_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('simulation_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
@@ -36,7 +36,7 @@ return new class() extends Migration {
 
             $table->timestamps();
 
-            $table->unique(['simulation_id', 'day_index']);
+            $table->unique(['simulation_id', 'day']);
         });
     }
 

@@ -6,6 +6,7 @@ use App\Models\CandleStick;
 use App\Models\Simulation;
 use Domain\Stock\Collections\CandleStickCollection;
 use Domain\Stock\DataTransferObjects\DaySimulationResultData;
+use Illuminate\Support\Carbon;
 
 class SimpleDaySimulationCalculator
 {
@@ -28,7 +29,7 @@ class SimpleDaySimulationCalculator
 
     private float $totalProfit = 0.0;
 
-    public function __construct(private int $dayIndex, private  CandleStickCollection $candleStickCollection, private  Simulation $simulation)
+    public function __construct(private Carbon $day, private  CandleStickCollection $candleStickCollection, private  Simulation $simulation)
     {
     }
 
@@ -87,7 +88,7 @@ class SimpleDaySimulationCalculator
         $restOfTheDaysCandlesticks = $this
             ->candleStickCollection
             ->filterCandleSticksBetweenTime(self::$timeIndexForAnalysis, self::$exitTime)
-            ->orderByTime();
+            ->orderByDateTimeOldest();
 
         foreach ($restOfTheDaysCandlesticks as $candleStick) {
             if ($this->longPositionStage === 1 && $candleStick->high >= $this->longEnterAtPrice) {
@@ -154,7 +155,7 @@ class SimpleDaySimulationCalculator
     private function dumpReport()
     {
         dump([
-            'index' => $this->dayIndex,
+            'day' => $this->day->toDateString(),
             // 'Long Enter at Price' => $this->longEnterAtPrice,
             // 'Long Exit at Price' => $this->longExitAtPrice,
             // 'Profit Long' => $this->longProfit,

@@ -22,7 +22,7 @@ class TickerController extends Controller
                             'id' => $ticker->id,
                             'symbol' => $ticker->symbol,
                             'highest_profit' => number_format($ticker->bestPerformingSimulation?->total_net_profit, 2),
-                            'highest_profit_percentage' => number_format($ticker->bestPerformingSimulation?->profit_percentage, 2),
+                            'highest_profit_percentage' => number_format($ticker->bestPerformingSimulation?->profit_percentage, 2).' %',
                             'number_of_simulations' => $ticker->simulations()->count(),
                             'date_range' => $ticker->getCandleDateRange(),
                         ];
@@ -46,8 +46,8 @@ class TickerController extends Controller
                     'id' => $ticker->id,
                     'symbol' => $ticker->symbol,
                     'number_of_simulations' => $ticker->simulations()->count(),
-                    'highest_profit' => number_format($ticker->simulations()->max('total_profit'), 2),
-                    'highest_profit_percentage' => number_format($ticker->bestPerformingSimulation?->profit_percentage, 2),
+                    'highest_profit' => number_format($ticker->bestPerformingSimulation?->total_profit, 2),
+                    'highest_profit_percentage' => number_format($ticker->bestPerformingSimulation?->profit_percentage, 2).' %',
                 ],
                 'simulations' => $simulations
                     ->transform(fn ($simulation) => [
@@ -63,8 +63,8 @@ class TickerController extends Controller
                         'long_net_profit' => number_format($simulation->long_net_profit, 2),
                         'short_net_profit' => number_format($simulation->short_net_profit, 2),
                         'total_net_profit' => number_format($simulation->total_net_profit, 2),
-                        
-                        'profit_percentage' => number_format($simulation->profit_percentage, 2),
+
+                        'profit_percentage' => number_format($simulation->profit_percentage, 2).' %',
 
                         'created_at' => $simulation->created_at->format('M d, Y (h:i a)'),
                         'date_range' => $simulation->dateRange(),

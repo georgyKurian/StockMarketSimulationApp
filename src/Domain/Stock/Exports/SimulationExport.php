@@ -17,7 +17,7 @@ class SimulationExport implements FromQuery, WithHeadings, WithMapping
     {
         return Day::query()
             ->with(['candleSticks'])
-            ->orderBy('day_index');
+            ->orderBy('day');
     }
 
     public function headings(): array

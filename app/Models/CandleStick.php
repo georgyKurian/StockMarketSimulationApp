@@ -11,6 +11,7 @@ class CandleStick extends Model
     use HasFactory;
 
     protected $casts = [
+        'day' => 'date',
         'open' => 'float',
         'high' => 'float',
         'low' => 'float',

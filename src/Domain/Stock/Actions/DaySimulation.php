@@ -11,24 +11,23 @@ use Illuminate\Support\Carbon;
 
 class DaySimulation
 {
-    public function execute(int $dayIndex, CandleStickCollection $candleStickCollection, Simulation $simulation)
+    public function execute(Carbon $day, CandleStickCollection $candleStickCollection, Simulation $simulation)
     {
         if ($candleStickCollection->count() <= 2) {
             return;
         }
 
-        $resultsData = (new SimpleDaySimulationCalculator($dayIndex, $candleStickCollection, $simulation))->calculate();
+        $resultsData = (new SimpleDaySimulationCalculator($day, $candleStickCollection, $simulation))->calculate();
 
         if ($resultsData) {
-            $this->saveReportToDatabase($simulation, $dayIndex, $resultsData);
+            $this->saveReportToDatabase($simulation, $day, $resultsData);
         }
     }
 
-    private function saveReportToDatabase(Simulation $simulation, int $dayIndex, DaySimulationResultData $daySimulationResultData)
+    private function saveReportToDatabase(Simulation $simulation, Carbon $day, DaySimulationResultData $daySimulationResultData)
     {
         Day::create([
-            'day_index' => $dayIndex,
-            'day' => Carbon::createFromIsoFormat('YMMDD', $dayIndex),
+            'day' => $day,
             'ticker_id' => $simulation->ticker_id,
             'simulation_id' => $simulation->id,
             'long_start_at_candle_stick_id' => $daySimulationResultData->longEnterAtCandleStick?->id,

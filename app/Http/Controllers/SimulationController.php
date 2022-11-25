@@ -12,14 +12,14 @@ class SimulationController extends Controller
     {
         $days = $simulation
             ->days()
-            ->orderBy('day_index')
+            ->latest('day')
             ->paginate(50);
 
         $months = $simulation
             ->days()
             ->groupByRaw("DATE_TRUNC('year',day), DATE_TRUNC('month', day)")
-            ->selectRaw("SUM(long_profit) as long_profit, SUM(short_profit) as short_profit, SUM(total_profit) as total_profit, DATE_TRUNC('year',day) as year, DATE_TRUNC('month',day) as month")
-            ->orderBYRaw('year, month')
+            ->selectRaw("SUM(long_profit) as long_profit, SUM(short_profit) as short_profit, SUM(total_profit) as total_profit, SUM(profit_percentage) as profit_percentage, DATE_TRUNC('year',day) as year, DATE_TRUNC('month',day) as month")
+            ->orderBYRaw('year DESC, month DESC')
             ->paginate(20, ['*'], 'days');
 
         return view(
@@ -28,10 +28,11 @@ class SimulationController extends Controller
                 'days' => $days
                     ->transform(fn (Day $day) => [
                             'id' => $day->id,
-                            'date' => Carbon::createFromIsoFormat('YMMDD', $day->day_index)->toDateString(),
+                            'date' => $day->day->toDateString(),
                             'long_profit' => number_format($day->long_profit, 2),
                             'short_profit' => number_format($day->short_profit, 2),
                             'total_profit' => number_format($day->total_profit, 2),
+                            'profit_percentage' => number_format($day->profit_percentage, 2).' %',
                         ]),
                 'months' => [
                     'data' => $months->transform(fn (Day $monthAggregate) => [
@@ -40,6 +41,7 @@ class SimulationController extends Controller
                         'long_profit' => number_format($monthAggregate->long_profit, 2),
                         'short_profit' => number_format($monthAggregate->short_profit, 2),
                         'total_profit' => number_format($monthAggregate->total_profit, 2),
+                        'profit_percentage' => number_format($monthAggregate->profit_percentage, 2).' %',
                     ]),
                     'links' => $months->links(),
                 ],

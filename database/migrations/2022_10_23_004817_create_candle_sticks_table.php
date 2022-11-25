@@ -16,7 +16,7 @@ return new class() extends Migration {
             $table->id();
 
             $table->foreignId('ticker_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('day_index')->index();
+            $table->date('day')->index();
             $table->integer('time');
 
             $table->text('open');

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Carbon;
 
 class Simulation extends Model
 {
@@ -26,22 +25,9 @@ class Simulation extends Model
 
     public function dateRange()
     {
-        /** type @var Carbon */
-        $fromDate = null;
-        /** type @var Carbon */
-        $toDate = null;
+        $from = $this->days()->oldest('day')->first()->day;
+        $to = $this->days()->latest('day')->first()->day;
 
-        $from = $this->days()->orderBy('day_index')->first()->day_index;
-        $to = $this->days()->orderByDesc('day_index')->first()->day_index;
-
-        if ($from) {
-            $fromDate = Carbon::createFromIsoFormat('YMMDD', $from);
-        }
-
-        if ($to) {
-            $toDate = Carbon::createFromIsoFormat('YMMDD', $to);
-        }
-
-        return $fromDate?->format('M d, Y').' - '.$toDate?->format('M d, Y')." ({$fromDate->diffInMonths($toDate)} Months)";
+        return $from?->format('M d, Y').' - '.$to?->format('M d, Y')." ({$from->diffInMonths($to)} Months)";
     }
 }

@@ -62,7 +62,7 @@ class ImportStockCandleStickDataJob implements ShouldQueue
                 //if ($this->isDuringTradeHours($dataBlock->startTime)) {
                 CandleStick::updateOrCreate([
                     'ticker_id' => $stockAggregateData->ticker->id,
-                    'day_index' => $dataBlock->startTime->isoFormat('YMMDD'),
+                    'day' => $dataBlock->startTime,
                     'time' => $dataBlock->startTime->isoFormat('HHmm'),
                     'open' => $dataBlock->open,
                     'high' => $dataBlock->high,

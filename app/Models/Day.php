@@ -8,6 +8,10 @@ class Day extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'day' => 'date',
+    ];
+
     public function ticker()
     {
         return $this->belongsTo(Ticker::class);
@@ -21,9 +25,9 @@ class Day extends Model
     public function candleSticks()
     {
         return $this
-            ->hasMany(CandleStick::class, 'day_index', 'day_index')
+            ->hasMany(CandleStick::class, 'day', 'day')
             ->where('ticker_id', $this->ticker_id)
-            ->orderByTime();
+            ->orderByDateTimeOldest();
     }
 
     public function longStartAtCandleStick()

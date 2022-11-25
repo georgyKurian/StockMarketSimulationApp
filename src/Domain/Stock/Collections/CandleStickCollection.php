@@ -20,20 +20,8 @@ class CandleStickCollection extends Collection
         return $this->where(fn (CandleStick $candleStick) => $fromTime < $candleStick->time && $candleStick->time < $toTime);
     }
 
-    public function orderByTime()
+    public function orderByDateTimeOldest()
     {
-        return $this->sortBy('time');
-    }
-
-    public function orderByDay()
-    {
-        return $this->sortBy('day_index');
-    }
-
-    public function orderByDayAndTime()
-    {
-        return $this
-            ->orderByDay()
-            ->orderByTime();
+        return $this->sortBy('recorded_at');
     }
 }

@@ -25,19 +25,19 @@ class SimulationAction
 
             $simulation
                 ->candleSticks()
-                ->select('day_index')
+                ->select('day')
                 ->distinct()
-                ->orderBy('day_index')
+                ->orderBy('day')
                 ->each(function (CandleStick $candleStick) use ($simulation) {
                     $candleSticks = $simulation
                         ->candleSticks()
-                        ->where('day_index', $candleStick->day_index)
+                        ->where('day', $candleStick->day)
                         ->where('time', '>=', 1000)
                         ->whereNotNull('volume')
-                        ->orderByTime()
+                        ->orderByDateTimeOldest()
                         ->get();
 
-                    $this->daySimulation->execute($candleStick->day_index, $candleSticks, $simulation);
+                    $this->daySimulation->execute($candleStick->day, $candleSticks, $simulation);
                 });
 
             $this->generateSimulationResult($simulation);

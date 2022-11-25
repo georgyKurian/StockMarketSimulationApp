@@ -7,20 +7,19 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="py-3 px-6">id</th>
-                                <th scope="col" class="py-3 px-6">Date</th>
-                                <th scope="col" class="py-3 px-6">Long Profit</th>
-                                <th scope="col" class="py-3 px-6">Short Profit</th>
-                                <th scope="col" class="py-3 px-6">Total Profit</th>
+                                <th scope="col" class="py-3 px-6" rowspan="2">Date</th>
+                                <th scope="col" class="pt-3 pb-2 px-6 text-center" colspan="3">Profit</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="pb-3 px-6 text-right">Long</th>
+                                <th scope="col" class="pb-3 px-6 text-right">Short</th>
+                                <th scope="col" class="pb-3 px-6 text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($days as $day)
                                 <tr
                                     class="{{ $loop->odd ? 'bg-white border-b dark:bg-gray-900 dark:border-gray-700' : 'bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700' }}">
-                                    <td class="py-1 px-6">
-                                        <a href="{{ route('days.show', $day['id']) }}">{{ $day['id'] }}</a>
-                                    </td>
                                     <td class="py-1 px-6">
                                         <a href="{{ route('days.show', $day['id']) }}">{{ $day['date'] }}</a>
                                     </td>
@@ -65,10 +64,14 @@
                             <thead
                                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="py-3 px-6">Month</th>
-                                    <th scope="col" class="py-3 px-6">Long Profit</th>
-                                    <th scope="col" class="py-3 px-6">Short Profit</th>
-                                    <th scope="col" class="py-3 px-6">Total Profit</th>
+                                    <th scope="col" class="py-3 px-6" rowspan="2">Month</th>
+                                    <th scope="col" class="pt-3 px-6 text-center" colspan="4">Profit </th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" class="pb-3 px-6">Short</th>
+                                    <th scope="col" class="pb-3 px-6">Long</th>
+                                    <th scope="col" class="pb-3 px-6">Total</th>
+                                    <th scope="col" class="pb-3 px-6">Percentage</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,6 +84,7 @@
                                         <td class="py-1 px-6 text-right">{{ $month['long_profit'] }}</td>
                                         <td class="py-1 px-6 text-right">{{ $month['short_profit'] }}</td>
                                         <td class="py-1 px-6 text-right">{{ $month['total_profit'] }}</td>
+                                        <td class="py-1 px-6 text-right">{{ $month['profit_percentage'] }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
