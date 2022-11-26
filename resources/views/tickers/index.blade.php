@@ -19,7 +19,7 @@
                                 <tr
                                     class="{{ $loop->odd ? 'bg-white border-b dark:bg-gray-900 dark:border-gray-700' : 'bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700' }}">
                                     <td class="py-1 px-6">
-                                        <a href="{{ route('tickers.show', $ticker['id']) }}">{{ $ticker['id'] }}</a>
+                                        <a href="{{ route('tickers.show', $ticker['id']) }}">{{ $loop->iteration }}</a>
                                     </td>
                                     <td class="py-1 px-6">
                                         <a href="{{ route('tickers.show', $ticker['id']) }}">{{ $ticker['symbol'] }}</a>
