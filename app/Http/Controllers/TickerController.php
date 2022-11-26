@@ -9,8 +9,8 @@ class TickerController extends Controller
     public function index()
     {
         $tickers = Ticker::query()
-            ->orderBy('symbol')
             ->with(['bestPerformingSimulation'])
+            ->orderBy('symbol')
             ->paginate(50);
 
         return view(
