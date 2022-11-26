@@ -32,7 +32,7 @@ class InvestmentProjection extends Command
         $tickerSymbol = $this->argument('tickerSymbol');
         $ticker = Ticker::findOrFailBySymbol($tickerSymbol);
 
-        for ($threshold = -0.1; $threshold <= 10; $threshold = $threshold + 0.05) {
+        for ($threshold = -0.1; $threshold <= 3; $threshold = $threshold + 0.02) {
             $simulationAction->execute($ticker, $threshold);
         }
 
