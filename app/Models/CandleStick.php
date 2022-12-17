@@ -12,12 +12,6 @@ class CandleStick extends Model
 
     protected $casts = [
         'day' => 'date',
-        'open' => 'float',
-        'high' => 'float',
-        'low' => 'float',
-        'close' => 'float',
-        'volume' => 'float',
-        'vw_avg_price' => 'float',
         'recorded_at' => 'datetime',
     ];
 

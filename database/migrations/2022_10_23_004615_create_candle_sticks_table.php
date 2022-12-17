@@ -19,12 +19,12 @@ return new class() extends Migration {
             $table->date('day')->index();
             $table->integer('time');
 
-            $table->text('open');
-            $table->text('high');
-            $table->text('low');
-            $table->text('close');
-            $table->text('volume');
-            $table->text('vw_avg_price')->nullable();
+            $table->integer('open');
+            $table->integer('high');
+            $table->integer('low');
+            $table->integer('close');
+            $table->integer('volume');
+            $table->integer('vw_avg_price')->nullable();
 
             $table->dateTime('recorded_at');
 

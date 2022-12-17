@@ -19,20 +19,20 @@ return new class() extends Migration {
             $table->foreignId('ticker_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('simulation_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
 
-            $table->text('long_enter_at_price')->nullable();
-            $table->text('short_enter_at_price')->nullable();
-            $table->text('long_exit_at_price')->nullable();
-            $table->text('short_exit_at_price')->nullable();
+            $table->integer('long_enter_at_price')->nullable();
+            $table->integer('short_enter_at_price')->nullable();
+            $table->integer('long_exit_at_price')->nullable();
+            $table->integer('short_exit_at_price')->nullable();
 
             $table->foreignId('long_start_at_candle_stick_id')->nullable()->constrained('candle_sticks');
             $table->foreignId('short_start_at_candle_stick_id')->nullable()->constrained('candle_sticks');
             $table->foreignId('long_end_at_candle_stick_id')->nullable()->constrained('candle_sticks');
             $table->foreignId('short_end_at_candle_stick_id')->nullable()->constrained('candle_sticks');
 
-            $table->float('long_profit')->default(0.00);
-            $table->float('short_profit')->default(0.00);
-            $table->float('total_profit')->default(0.00);
-            $table->float('profit_percentage')->default(0.00);
+            $table->integer('long_profit')->default(0);
+            $table->integer('short_profit')->default(0);
+            $table->integer('total_profit')->default(0);
+            $table->integer('profit_percentage')->default(0);
 
             $table->timestamps();
 

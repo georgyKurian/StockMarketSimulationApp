@@ -9,16 +9,16 @@ class DaySimulationResultData
     public function __construct(
         public ?CandleStick $longEnterAtCandleStick,
         public ?Candlestick $longExitAtCandleStick,
-        public ?float $longEnterAtPrice,
-        public ?float $longExitAtPrice,
-        public float $longProfit,
+        public ?int $longEnterAtPrice,
+        public ?int $longExitAtPrice,
+        public int $longProfit,
         public ?Candlestick $shortEnterAtCandleStick,
         public ?Candlestick $shortExitAtCandleStick,
-        public ?float $shortEnterAtPrice,
-        public ?float $shortExitAtPrice,
-        public float $shortProfit,
-        public float $totalProfit,
-        public float $profitPercentage,
+        public ?int $shortEnterAtPrice,
+        public ?int $shortExitAtPrice,
+        public int $shortProfit,
+        public int $totalProfit,
+        public int $profitPercentage,
     ) {
     }
 }

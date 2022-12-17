@@ -17,17 +17,18 @@ return new class() extends Migration {
             $table->foreignId('ticker_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('threshold');
 
-            $table->float('long_profit')->default(0.00);
-            $table->float('short_profit')->default(0.00);
-            $table->float('total_profit')->default(0.00);
-            $table->float('profit_percentage')->default(0.00);
+            $table->integer('long_profit')->default(0);
+            $table->integer('short_profit')->default(0);
+            $table->integer('total_profit')->default(0);
+            $table->integer('profit_percentage')->default(0);
 
             $table->integer('long_entered_days')->default(0);
             $table->integer('short_entered_days')->default(0);
 
-            $table->float('long_net_profit')->default(0.00);
-            $table->float('short_net_profit')->default(0.00);
-            $table->float('total_net_profit')->default(0.00);
+            $table->integer('long_net_profit')->default(0);
+            $table->integer('short_net_profit')->default(0);
+            $table->integer('total_net_profit')->default(0);
+            $table->integer('net_profit_percentage')->default(0);
 
             $table->timestamps();
 

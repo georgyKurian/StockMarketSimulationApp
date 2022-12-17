@@ -21,8 +21,8 @@ class TickerController extends Controller
                         return [
                             'id' => $ticker->id,
                             'symbol' => $ticker->symbol,
-                            'highest_profit' => number_format($ticker->bestPerformingSimulation?->total_net_profit, 2),
-                            'highest_profit_percentage' => number_format($ticker->bestPerformingSimulation?->profit_percentage, 2).' %',
+                            'highest_profit' => convert_cents_to_dollar_string($ticker->bestPerformingSimulation?->total_net_profit),
+                            'highest_profit_percentage' => convert_to_percentage_string($ticker->bestPerformingSimulation?->profit_percentage),
                             'number_of_simulations' => $ticker->simulations()->count(),
                             'date_range' => $ticker->getCandleDateRange(),
                         ];
@@ -46,25 +46,25 @@ class TickerController extends Controller
                     'id' => $ticker->id,
                     'symbol' => $ticker->symbol,
                     'number_of_simulations' => $ticker->simulations()->count(),
-                    'highest_profit' => number_format($ticker->bestPerformingSimulation?->total_profit, 2),
-                    'highest_profit_percentage' => number_format($ticker->bestPerformingSimulation?->profit_percentage, 2).' %',
+                    'highest_profit' => convert_cents_to_dollar_string($ticker->bestPerformingSimulation?->total_profit),
+                    'highest_profit_percentage' => convert_to_percentage_string($ticker->bestPerformingSimulation?->profit_percentage),
                 ],
                 'simulations' => $simulations
                     ->transform(fn ($simulation) => [
                         'id' => $simulation->id,
-                        'threshold' => $simulation->threshold,
-                        'long_profit' => number_format($simulation->long_profit, 2),
-                        'short_profit' => number_format($simulation->short_profit, 2),
-                        'total_profit' => number_format($simulation->total_profit, 2),
+                        'threshold' => convert_cents_to_dollar_string($simulation->threshold),
+                        'long_profit' => convert_cents_to_dollar_string($simulation->long_profit),
+                        'short_profit' => convert_cents_to_dollar_string($simulation->short_profit),
+                        'total_profit' => convert_cents_to_dollar_string($simulation->total_profit),
 
                         'short_entered_days' => $simulation->short_entered_days,
                         'long_entered_days' => $simulation->long_entered_days,
 
-                        'long_net_profit' => number_format($simulation->long_net_profit, 2),
-                        'short_net_profit' => number_format($simulation->short_net_profit, 2),
-                        'total_net_profit' => number_format($simulation->total_net_profit, 2),
+                        'long_net_profit' => convert_cents_to_dollar_string($simulation->long_net_profit),
+                        'short_net_profit' => convert_cents_to_dollar_string($simulation->short_net_profit),
+                        'total_net_profit' => convert_cents_to_dollar_string($simulation->total_net_profit),
 
-                        'profit_percentage' => number_format($simulation->profit_percentage, 2).' %',
+                        'profit_percentage' => convert_to_percentage_string($simulation->profit_percentage),
 
                         'created_at' => $simulation->created_at->format('M d, Y (h:i a)'),
                         'date_range' => $simulation->dateRange(),
