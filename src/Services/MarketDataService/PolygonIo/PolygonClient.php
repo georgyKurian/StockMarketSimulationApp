@@ -44,6 +44,12 @@ class PolygonClient extends Client
                 'limit' => 50000,
             ]);
 
+        Log::withContext([
+            'Multiplier' => $multiplier,
+            'From' => $from->toDateString(),
+            'To' => $to->toDateString(),
+        ]);
+        
         return $this
             ->checkResponseStatus()
             ->parseResponseBody();
@@ -72,26 +78,28 @@ class PolygonClient extends Client
         $candleStickCollection = collect();
         $this->responseData = json_decode($this->response->body());
 
-        if (! $this->responseData?->results) {
-            Log::withContext(['responseBody' => $this->response->body()]);
-            throw new Exception('No result in the response');
-        }
+        if (
+            $this->responseData
+            && !empty($this->responseData->results)
+            ) {
+            foreach ($this->responseData->results as $candleStickData) {
+                Log::withContext([$candleStickData]);
 
-        foreach ($this->responseData->results as $candleStickData) {
-            Log::withContext([$candleStickData]);
-
-            $candleStickCollection->add(
-                new StockCandleStickData(
-                    startTimestamp: $candleStickData->t,
-                    open: $candleStickData->o,
-                    high: $candleStickData->h,
-                    low: $candleStickData->l,
-                    close: $candleStickData->c,
-                    volume: $candleStickData->v,
-                    numberOfTransactions: property_exists($candleStickData, 'n') ? $candleStickData->n : null,
-                    volumeWeightedAveragePrice: property_exists($candleStickData, 'vw') ? $candleStickData->vw : null,
-                )
-            );
+                $candleStickCollection->add(
+                    new StockCandleStickData(
+                        startTimestamp: $candleStickData->t,
+                        open: convert_dollars_to_cents($candleStickData->o),
+                        high: convert_dollars_to_cents($candleStickData->h),
+                        low: convert_dollars_to_cents($candleStickData->l),
+                        close: convert_dollars_to_cents($candleStickData->c),
+                        volume: $candleStickData->v,
+                        numberOfTransactions: property_exists($candleStickData, 'n') ? $candleStickData->n : null,
+                        volumeWeightedAveragePrice: property_exists($candleStickData, 'vw') ? convert_dollars_to_cents($candleStickData->vw) : null,
+                    )
+                );
+            }
+        } else{
+            Log::error(['responseBody' => $this->response->body()]);
         }
 
         return new StockAggregatesData(

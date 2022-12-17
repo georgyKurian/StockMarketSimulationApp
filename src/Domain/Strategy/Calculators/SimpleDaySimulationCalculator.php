@@ -15,19 +15,20 @@ class SimpleDaySimulationCalculator
 
     private ?CandleStick $longEnterAtCandleStick;
     private ?CandleStick $longExitAtCandleStick;
-    private ?float $longEnterAtPrice;
-    private ?float $longExitAtPrice;
-    private float $longProfit = 0;
+    private ?int $longEnterAtPrice;
+    private ?int $longExitAtPrice;
+    private int $longProfit = 0;
     private int $longPositionStage;
 
     private ?CandleStick $shortEnterAtCandleStick;
     private ?CandleStick $shortExitAtCandleStick;
-    private ?float $shortEnterAtPrice;
-    private ?float $shortExitAtPrice;
-    private float $shortProfit = 0.0;
+    private ?int $shortEnterAtPrice;
+    private ?int $shortExitAtPrice;
+    private int $shortProfit = 0;
     private int $shortPositionStage;
+    private int $profitPercentage=0;
 
-    private float $totalProfit = 0.0;
+    private int $totalProfit = 0;
 
     public function __construct(private Carbon $day, private  CandleStickCollection $candleStickCollection, private  Simulation $simulation)
     {
@@ -50,15 +51,15 @@ class SimpleDaySimulationCalculator
         $this->longExitAtCandleStick = null;
         $this->longEnterAtPrice = null;
         $this->longExitAtPrice = null;
-        $this->longProfit = 0.0;
+        $this->longProfit = 0;
 
         $this->shortEnterAtCandleStick = null;
         $this->shortExitAtCandleStick = null;
         $this->shortEnterAtPrice = null;
         $this->shortExitAtPrice = null;
-        $this->shortProfit = 0.0;
+        $this->shortProfit = 0;
 
-        $this->totalProfit = 0.0;
+        $this->totalProfit = 0;
 
         $this->longPositionStage = 1;
         $this->shortPositionStage = 1;
@@ -137,17 +138,17 @@ class SimpleDaySimulationCalculator
         if ($this->longExitAtPrice && $this->longEnterAtPrice) {
             $this->longProfit = $this->longExitAtPrice - $this->longEnterAtPrice;
         } else {
-            $this->longProfit = 0.0;
+            $this->longProfit = 0;
         }
 
         if ($this->shortExitAtPrice && $this->shortEnterAtPrice) {
             $this->shortProfit = $this->shortEnterAtPrice - $this->shortExitAtPrice;
         } else {
-            $this->shortProfit = 0.0;
+            $this->shortProfit = 0;
         }
 
         $this->totalProfit = $this->longProfit + $this->shortProfit;
-        $this->profitPercentage = $this->totalProfit * 100 / $this->longEnterAtPrice;
+        $this->profitPercentage = round($this->totalProfit * 10000 / $this->longEnterAtPrice);
 
         return $this;
     }
@@ -174,7 +175,7 @@ class SimpleDaySimulationCalculator
             // 'short_enter_at_price' => $this->shortEnterAtPrice,
             // 'short_exit_at_price' => $this->shortExitAtPrice,
             // 'short_profit' => $this->shortProfit,
-
+            'Profit Percentage' => $this->profitPercentage,
             'Total Profit' => $this->totalProfit,
         ]);
     }

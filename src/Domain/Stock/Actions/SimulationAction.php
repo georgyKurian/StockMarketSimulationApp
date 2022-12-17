@@ -13,7 +13,7 @@ class SimulationAction
     {
     }
 
-    public function execute(Ticker $ticker, float $threshold)
+    public function execute(Ticker $ticker, int $threshold)
     {
         throw_if($ticker->candleSticks()->doesntExist(), 'Stock dosen\'t have any data to simulate');
 
@@ -48,21 +48,24 @@ class SimulationAction
     {
         $aggregateResult = $simulation
             ->days()
-            ->selectRaw('SUM(long_profit) as long_profit, SUM(short_profit) as short_profit, SUM(profit_percentage) as profit_percentage')
+            ->selectRaw('SUM(long_profit) as long_profit, SUM(short_profit) as short_profit, avg(long_enter_at_price) as average_long_enter_at_price, sum(profit_percentage) as profit_percentage')
             ->first();
 
         $longEnteredDays = $simulation
             ->days()
-            ->where('long_profit', '!=', 0.0)
+            ->where('long_profit', '!=', 0)
             ->count();
 
         $shortEnteredDays = $simulation
             ->days()
-            ->where('short_profit', '!=', 0.0)
+            ->where('short_profit', '!=', 0)
             ->count();
 
-        $longNetProfit = $aggregateResult->long_profit - ($longEnteredDays * 2 * 0.01);
-        $shortNetProfit = $aggregateResult->short_profit - ($shortEnteredDays * 2 * 0.01);
+        $longNetProfit = $aggregateResult->long_profit - ($longEnteredDays * 2);
+        $shortNetProfit = $aggregateResult->short_profit - ($shortEnteredDays * 2);
+        
+        $totalNetProfit = $longNetProfit + $shortNetProfit;
+        $netProfitPercentage = round($totalNetProfit / $aggregateResult->average_long_enter_at_price);
 
         $simulation->update([
             'long_profit' => $aggregateResult->long_profit,
@@ -76,6 +79,7 @@ class SimulationAction
             'long_net_profit' => $longNetProfit,
             'short_net_profit' => $shortNetProfit,
             'total_net_profit' =>  $longNetProfit + $shortNetProfit,
+            'net_profit_percentage' => $netProfitPercentage,
         ]);
     }
 }

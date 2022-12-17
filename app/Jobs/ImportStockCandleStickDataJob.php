@@ -50,8 +50,8 @@ class ImportStockCandleStickDataJob implements ShouldQueue
         $stockAggregateData = $client
             ->getStockAggregates(
                 ticker: $this->ticker,
-                multiplier:15,
-                timespan:'minute',
+                multiplier: 15,
+                timespan: 'minute',
                 from: $this->from,
                 to: $this->to
             );
@@ -59,7 +59,6 @@ class ImportStockCandleStickDataJob implements ShouldQueue
         $stockAggregateData
             ->stockCandleStickDataCollection
             ->each(function (StockCandleStickData $dataBlock) use ($stockAggregateData) {
-                //if ($this->isDuringTradeHours($dataBlock->startTime)) {
                 CandleStick::updateOrCreate([
                     'ticker_id' => $stockAggregateData->ticker->id,
                     'day' => $dataBlock->startTime,
@@ -72,7 +71,6 @@ class ImportStockCandleStickDataJob implements ShouldQueue
                     'vw_avg_price' => $dataBlock->volumeWeightedAveragePrice,
                     'recorded_at' => $dataBlock->startTime,
                 ]);
-                //}
             });
     }
 
